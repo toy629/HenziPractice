@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>繁體中文筆順練習</title>
+  <script src="https://unpkg.com/hanzi-writer@2.0.2/dist/hanzi-writer.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+      background-color: #FFFFFF; 
+      color: #333; 
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-weight: 600; 
+    }
+
+    h1 {
+      color: #FF6F61; 
+      margin-bottom: 25px;
+      font-weight: 700; 
+    }
+
+    .subtitle {
+        font-size: 1.1em;
+        color: #555555; 
+        margin-bottom: 15px;
+        font-weight: normal; 
+    }
+
+    #input-mode-selector {
+      margin-bottom: 15px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .mode-button {
+      font-size: 15px;
+      padding: 8px 15px;
+      border: 1px solid #76D7C4; 
+      background-color: #fff;
+      color: #76D7C4; 
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      font-weight: 600; 
+    }
+    .mode-button.active, .mode-button:hover {
+      background-color: #76D7C4; 
+      color: white;
+    }
+
+    #input-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
+      gap: 10px;
+      width: 320px;
+    }
+
+    #text-input-area, #file-input-area {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #text-input {
+      font-size: 18px;
+      padding: 10px;
+      width: 90%;
+      text-align: center;
+      border: 1px solid #DDDDDD; 
+      border-radius: 6px;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+      font-weight: normal; 
+    }
+
+    #file-input {
+      display: none; 
+    }
+
+    .file-input-label {
+      font-size: 16px;
+      padding: 10px 15px;
+      background-color: #fff;
+      color: #76D7C4; 
+      border: 1px dashed #76D7C4; 
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      width: 90%;
+      box-sizing: border-box;
+      font-weight: 600;
+    }
+    .file-input-label:hover {
+      background-color: #E0F7FA; 
+    }
+    #selected-file-name {
+        font-size: 0.9em;
+        color: #555555; 
+        margin-top: 5px;
+        word-break: break-all;
+        font-weight: normal;
+    }
+
+
+    #process-data-button {
+      font-size: 17px;
+      padding: 10px 20px;
+      background-color: #76D7C4; 
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      width: calc(90% + 22px); 
+      font-weight: 600;
+    }
+
+    #process-data-button:hover {
+      background-color: #65BCAA; 
+    }
+
+    #character-selection-buttons-container { 
+        width: 100%;
+        max-width: 90%;
+        margin-bottom: 20px;
+    }
+    #character-selection-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .char-select-button {
+      font-size: 18px;
+      padding: 8px 12px;
+      background-color: #FFDAB9; 
+      color: #333333; 
+      border: 1px solid #FFCFAA; 
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+      font-weight: 600;
+    }
+
+    .char-select-button:hover {
+      background-color: #FFC8A2; 
+      border-color: #FFB77E;
+    }
+    .char-select-button.active {
+      background-color: #FFC8A2; 
+      color: #333333; 
+      border-color: #FFB77E;
+      box-shadow: 0 0 0 2px #FFB77E inset; 
+    }
+
+    .display-area-container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 20px;
+      width: 100%;
+      max-width: 480px;
+      margin-bottom: 30px; 
+    }
+
+    .hanzi-display-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hanzi-box {
+      width: 180px;
+      height: 180px;
+      background-color: #FFFFFF; 
+      border: 1px solid #DDDDDD; 
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative; 
+    }
+
+    #replay-animation-button {
+      font-size: 14px;
+      padding: 6px 12px;
+      background-color: #76D7C4; 
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      order: 1;
+      font-weight: 600;
+    }
+
+    #replay-animation-button:hover {
+      background-color: #65BCAA; 
+    }
+
+    #replay-animation-button:disabled {
+      background-color: #B0BEC5; 
+      color: #78909C;
+      cursor: not-allowed;
+    }
+
+    #animation-display {
+        order: 0;
+    }
+
+    #quiz-display {
+      touch-action: none;
+    }
+
+    #practiced-characters-container {
+      margin-top: 20px;
+      padding: 15px;
+      width: 90%;
+      max-width: 600px;
+      background-color: #fdfdfd; 
+      border: 1px solid #eee;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    #practiced-characters-container h2 {
+      color: #00695C; 
+      font-size: 1.3em;
+      margin-top: 0;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+    #practiced-characters-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      font-weight: normal; 
+      min-height: 2em; 
+    }
+    .practiced-char-item {
+      background-color: #E0F2F1; 
+      color: #00796b; 
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 1.1em;
+    }
+
+    /* --- 祝賀動畫樣式調整 --- */
+    #congrats-overlay {
+      position: absolute; 
+      top: 0; /* 相對父元素 quiz-box 定位 */
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: none; 
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10; 
+      pointer-events: none; 
+      overflow: hidden; 
+      background-color: rgba(255, 255, 255, 0.85); /* 半透明背景 */
+      border-radius: 8px; 
+    }
+
+    #congrats-message {
+      font-size: 1.8em; 
+      color: #FF6F61; 
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+      margin-bottom: 10px; 
+      font-weight: 700; 
+      font-family: 'DFPYuanMXBold-B5', 'BLeUUX', 'Arial Rounded MT Bold', 'Hiragino Maru Gothic ProN', 'LiHei Pro', '儷黑 Pro', 'Microsoft JhengHei Rounded', 'Microsoft YaHei Rounded', "微軟正黑體", "微軟雅黑體", sans-serif;
+      animation: message-appear 0.5s ease-out forwards;
+      display: flex; 
+      align-items: center;
+    }
+    
+    .thumbs-up-icon svg { 
+        width: 1em; 
+        height: 1em;
+        fill: #FF6F61; 
+        margin-left: 8px;
+    }
+
+    .stars-container {
+      display: flex;
+      gap: 5px; 
+    }
+
+    .congrats-star svg { 
+      width: 28px;  
+      height: 28px;
+    }
+    .congrats-star { 
+      opacity: 0;
+      animation: star-sparkle 1.2s ease-out forwards;
+    }
+    
+    .congrats-star:nth-child(1) { animation-delay: 0.0s; }
+    .congrats-star:nth-child(2) { animation-delay: 0.2s; }
+    .congrats-star:nth-child(3) { animation-delay: 0.1s; }
+
+
+    @keyframes message-appear {
+      from { opacity: 0; transform: scale(0.7) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    @keyframes star-sparkle {
+      0% { opacity: 0; transform: scale(0.3) rotate(-45deg) translateY(15px); }
+      40% { opacity: 1; transform: scale(1.2) rotate(15deg) translateY(-5px); }
+      70% { opacity: 0.8; transform: scale(1) rotate(0deg) translateY(0); }
+      100% { opacity: 0; transform: scale(0.5) rotate(45deg) translateY(10px); }
+    }
+    /* --- 祝賀動畫樣式結束 --- */
+  </style>
+</head>
+
+<body>
+  <h1>繁體中文筆順練習</h1>
+
+  <div id="input-mode-selector">
+    <button id="direct-input-mode-btn" class="mode-button active" onclick="showDirectInputMode()">直接輸入</button>
+    <button id="file-input-mode-btn" class="mode-button" onclick="showFileUploadMode()">匯入檔案</button>
+  </div>
+
+  <div id="input-container">
+    <div id="text-input-area">
+      <input type="text" id="text-input" placeholder="輸入或貼上練習文字">
+    </div>
+    <div id="file-input-area" style="display:none;">
+      <label for="file-input" class="file-input-label">點此選擇 .txt 檔案</label>
+      <input type="file" id="file-input" accept=".txt" onchange="updateSelectedFileName()">
+      <span id="selected-file-name"></span>
+    </div>
+    <button id="process-data-button" onclick="processData()">處理資料</button>
+  </div>
+  
+  <div id="character-selection-buttons-container">
+    <p class="subtitle" id="character-select-subtitle" style="display:none;">選擇要練習的字：</p>
+    <div id="character-selection-buttons">
+      </div>
+  </div>
+
+
+  <div class="display-area-container">
+    <div class="hanzi-display-wrapper">
+      <div id="animation-display" class="hanzi-box"></div>
+      <button id="replay-animation-button" onclick="replayAnimation()" disabled>播放動畫</button>
+    </div>
+    <div id="quiz-display" class="hanzi-box">
+        <div id="congrats-overlay">
+            <div id="congrats-message">你真棒!<span class="thumbs-up-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"></path></svg></span></div>
+            <div class="stars-container">
+              <span class="congrats-star"><svg viewBox="0 0 26 26"><path d="M12 .5l3.09 6.26L22 7.72l-5.46 5.3L17.91 21.5 12 18.27 6.09 21.5l1.36-7.98L2 7.72l6.91-1.01L12 .5z" fill="#FFD700" stroke="#E7B000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span class="congrats-star"><svg viewBox="0 0 26 26"><path d="M12 .5l3.09 6.26L22 7.72l-5.46 5.3L17.91 21.5 12 18.27 6.09 21.5l1.36-7.98L2 7.72l6.91-1.01L12 .5z" fill="#FFD700" stroke="#E7B000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span class="congrats-star"><svg viewBox="0 0 26 26"><path d="M12 .5l3.09 6.26L22 7.72l-5.46 5.3L17.91 21.5 12 18.27 6.09 21.5l1.36-7.98L2 7.72l6.91-1.01L12 .5z" fill="#FFD700" stroke="#E7B000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <div id="practiced-characters-container">
+    <h2>已練習字元</h2>
+    <div id="practiced-characters-list">
+    </div>
+  </div>
+
+  <script>
+    let animationInstance = null;
+    let quizInstance = null;
+    let currentDisplayChar = null;
+    let inputMode = 'text'; 
+    let practicedCharSet = new Set(); 
+
+    const replayButton = document.getElementById('replay-animation-button');
+    const charSelectionContainer = document.getElementById('character-selection-buttons');
+    const textInputArea = document.getElementById('text-input-area');
+    const fileInputArea = document.getElementById('file-input-area');
+    const processDataButton = document.getElementById('process-data-button');
+    const directInputModeBtn = document.getElementById('direct-input-mode-btn');
+    const fileInputModeBtn = document.getElementById('file-input-mode-btn');
+    const fileInput = document.getElementById('file-input');
+    const selectedFileNameDisplay = document.getElementById('selected-file-name');
+    const characterSelectSubtitle = document.getElementById('character-select-subtitle');
+    const practicedCharsListDiv = document.getElementById('practiced-characters-list'); 
+    // const congratsOverlay = document.getElementById('congrats-overlay'); // congratsOverlay is now inside quizBox
+
+
+    function showDirectInputMode() { 
+        inputMode = 'text';
+        textInputArea.style.display = 'flex';
+        fileInputArea.style.display = 'none';
+        processDataButton.textContent = '處理輸入文字';
+        directInputModeBtn.classList.add('active');
+        fileInputModeBtn.classList.remove('active');
+        selectedFileNameDisplay.textContent = ''; 
+        fileInput.value = ''; 
+    }
+    function showFileUploadMode() { 
+        inputMode = 'file';
+        textInputArea.style.display = 'none';
+        fileInputArea.style.display = 'flex';
+        processDataButton.textContent = '處理選定檔案';
+        directInputModeBtn.classList.remove('active');
+        fileInputModeBtn.classList.add('active');
+    }
+    function updateSelectedFileName() { 
+        if (fileInput.files.length > 0) {
+            selectedFileNameDisplay.textContent = `已選檔案: ${fileInput.files[0].name}`;
+        } else {
+            selectedFileNameDisplay.textContent = '';
+        }
+    }
+    function processData() { 
+      const animBox = document.getElementById('animation-display');
+      const quizBox = document.getElementById('quiz-display');
+      animBox.innerHTML = '';
+      // quizBox.innerHTML = ''; // 不能直接清空，因為 congrats-overlay 在裡面了
+      // 清空 quizBox 時要保留 congrats-overlay
+      const congratsElem = quizBox.querySelector('#congrats-overlay');
+      quizBox.innerHTML = ''; // 先清空
+      if (congratsElem) quizBox.appendChild(congratsElem); // 再把 congrats-overlay 加回去
+
+      charSelectionContainer.innerHTML = '';
+      animationInstance = null;
+      quizInstance = null;
+      currentDisplayChar = null;
+      replayButton.disabled = true;
+      characterSelectSubtitle.style.display = 'none';
+
+      if (inputMode === 'text') {
+        const text = document.getElementById("text-input").value.trim();
+        if (text.length > 0) {
+          generateCharacterButtons(text);
+        } else {
+          alert("請輸入文字！");
+        }
+      } else if (inputMode === 'file') {
+        const file = fileInput.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            const fileContent = e.target.result;
+            generateCharacterButtons(fileContent);
+          };
+          reader.onerror = function() {
+            alert("讀取檔案時發生錯誤。");
+          };
+          reader.readAsText(file, 'UTF-8');
+        } else {
+          alert("請選擇一個檔案！");
+        }
+      }
+    }
+    function generateCharacterButtons(text) { 
+      const uniqueChars = [...new Set(text.replace(/[^\u4e00-\u9fa5]/g, ''))];
+      if (uniqueChars.length > 0) {
+        characterSelectSubtitle.style.display = 'block'; 
+        uniqueChars.forEach(char => {
+          const button = document.createElement('button');
+          button.classList.add('char-select-button');
+          button.textContent = char;
+          button.onclick = function() {
+            document.querySelectorAll('.char-select-button.active').forEach(activeBtn => {
+              activeBtn.classList.remove('active');
+            });
+            this.classList.add('active');
+            displayCharacterInBothModes(char);
+          };
+          charSelectionContainer.appendChild(button);
+        });
+      } else {
+        characterSelectSubtitle.style.display = 'none';
+        alert("未在輸入中找到有效的中文字元進行練習！");
+      }
+    }
+
+    function displayCharacterInBothModes(char) {
+      currentDisplayChar = char; 
+      const animBox = document.getElementById('animation-display');
+      const quizBox = document.getElementById('quiz-display');
+
+      animBox.innerHTML = '';
+      // 清空 quizBox 時要保留 congrats-overlay
+      const congratsElem = quizBox.querySelector('#congrats-overlay');
+      quizBox.innerHTML = ''; // 清空除了 congrats-overlay 之外的所有內容
+      if (congratsElem) {
+          quizBox.appendChild(congratsElem); // 確保 congrats-overlay 仍然是 quizBox 的子元素
+          congratsElem.style.display = 'none'; // 確保它初始是隱藏的
+      } else {
+          // 如果因為某些原因 congrats-overlay 不存在了，理論上不應該發生，因為它在 HTML 裡
+          console.error("Congrats overlay was missing from quizBox DOM during clear.");
+      }
+
+
+      animationInstance = null;
+      quizInstance = null;
+      replayButton.disabled = true;
+
+      const boxSize = 180;
+      const padding = 15;
+
+      animationInstance = HanziWriter.create(animBox, char, {
+        width: boxSize, height: boxSize, padding: padding,
+        strokeColor: '#000000', showCharacter: true, showOutline: false,
+        strokeAnimationSpeed: 0.6, delayBetweenStrokes: 80,
+        autoAnimate: false,
+        onLoadCharDataError: function(err) {
+            console.error("Animation: onLoadCharDataError for char:", char, err);
+            animBox.innerHTML = '字元載入失敗'; replayButton.disabled = true;
+        },
+        onLoadCharDataSuccess: function() {
+            console.log("Animation: onLoadCharDataSuccess for char:", char);
+            if (animationInstance) {
+                animationInstance.animateCharacter(); replayButton.disabled = false;
+            }
+        },
+        onComplete: function() { console.log("Animation: animation complete for char:", char); }
+      });
+      if (!animationInstance) { console.error("Failed to create animationInstance for char:", char); replayButton.disabled = true; }
+      
+      quizInstance = HanziWriter.create(quizBox, char, { // HanziWriter 會在 quizBox 中創建 SVG
+        width: boxSize, height: boxSize, padding: padding,
+        strokeColor: '#000000', showCharacter: false, showOutline: true,
+        outlineColor: '#DDDDDD', drawingColor: '#333333',
+        drawingWidth: Math.max(6, boxSize / 25),
+        leniency: 1.3, showHintAfterMisses: 2, highlightOnComplete: true,
+        onLoadCharDataError: function(err) {
+            console.error("Quiz: onLoadCharDataError for char:", char, err); 
+            const errorMsgDiv = document.createElement('div');
+            errorMsgDiv.textContent = '字元載入失敗';
+            // 清空 quizBox (除了 congrats overlay) 再加入錯誤訊息
+            const currentCongrats = quizBox.querySelector('#congrats-overlay');
+            quizBox.innerHTML = '';
+            if (currentCongrats) quizBox.appendChild(currentCongrats);
+            quizBox.appendChild(errorMsgDiv);
+        },
+        onLoadCharDataSuccess: function() {
+            console.log("Quiz: onLoadCharDataSuccess for char:", char);
+            if (quizInstance) { quizInstance.quiz(); }
+        },
+        onComplete: function(summaryData){ 
+            console.log(`Quiz for ${char} complete. Total mistakes: ${summaryData.totalMistakes}`);
+            if (!practicedCharSet.has(char)) {
+                practicedCharSet.add(char);
+                updatePracticedCharactersDisplay();
+            }
+            showCongratulationAnimation(); 
+        }
+      });
+      if (!quizInstance) { console.error("Failed to create quizInstance for char:", char); }
+    }
+
+    function replayAnimation() { 
+      if (animationInstance && currentDisplayChar) {
+        animationInstance.animateCharacter();
+      }
+    }
+    function updatePracticedCharactersDisplay() { 
+        if (!practicedCharsListDiv) return;
+        practicedCharsListDiv.innerHTML = ''; 
+        if (practicedCharSet.size === 0) {
+            practicedCharsListDiv.textContent = '尚未練習任何字元。';
+            return;
+        }
+        const charsArray = Array.from(practicedCharSet); 
+        charsArray.forEach(practicedChar => {
+            const charSpan = document.createElement('span');
+            charSpan.classList.add('practiced-char-item');
+            charSpan.textContent = practicedChar;
+            practicedCharsListDiv.appendChild(charSpan);
+        });
+    }
+
+    function showCongratulationAnimation() {
+        const congratsInQuizBox = document.getElementById('quiz-display').querySelector('#congrats-overlay');
+        if (!congratsInQuizBox) {
+            console.error("#congrats-overlay not found inside #quiz-display for animation!");
+            // 如果真的找不到，可能是因為 quizBox 被 HanziWriter 以外的方式清空了
+            // 嘗試重新將 HTML 結構放入（這是一個備用方案，理想情況下 HTML 結構應保持）
+            const quizBox = document.getElementById('quiz-display');
+            let temporaryCongratsOverlay = quizBox.querySelector('#congrats-overlay');
+            if (!temporaryCongratsOverlay) {
+                // 創建並插入 congrats-overlay 的 HTML
+                const overlayHTML = `
+                    <div id="congrats-message">你真棒!<span class="thumbs-up-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"></path></svg></span></div>
+                    <div class="stars-container">
+                      <span class="congrats-star"><svg viewBox="0 0 26 26"><path d="M12 .5l3.09 6.26L22 7.72l-5.46 5.3L17.91 21.5 12 18.27 6.09 21.5l1.36-7.98L2 7.72l6.91-1.01L12 .5z" fill="#FFD700" stroke="#E7B000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                      <span class="congrats-star"><svg viewBox="0 0 26 26"><path d="M12 .5l3.09 6.26L22 7.72l-5.46 5.3L17.91 21.5 12 18.27 6.09 21.5l1.36-7.98L2 7.72l6.91-1.01L12 .5z" fill="#FFD700" stroke="#E7B000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                      <span class="congrats-star"><svg viewBox="0 0 26 26"><path d="M12 .5l3.09 6.26L22 7.72l-5.46 5.3L17.91 21.5 12 18.27 6.09 21.5l1.36-7.98L2 7.72l6.91-1.01L12 .5z" fill="#FFD700" stroke="#E7B000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                    </div>`;
+                const tempDiv = document.createElement('div');
+                tempDiv.id = 'congrats-overlay';
+                // 樣式也需要從CSS中對應，或者在這裡設定關鍵的 display:none; position:absolute; etc.
+                tempDiv.style.position = 'absolute';
+                tempDiv.style.top = '0'; tempDiv.style.left = '0';
+                tempDiv.style.width = '100%'; tempDiv.style.height = '100%';
+                tempDiv.style.zIndex = '10';
+                tempDiv.style.pointerEvents = 'none';
+                tempDiv.style.overflow = 'hidden';
+                tempDiv.style.backgroundColor = 'rgba(255, 255, 255, 0.85)';
+                tempDiv.style.borderRadius = '8px';
+                tempDiv.style.display = 'none'; // 初始隱藏
+                tempDiv.style.flexDirection = 'column';
+                tempDiv.style.alignItems = 'center';
+                tempDiv.style.justifyContent = 'center';
+                tempDiv.innerHTML = overlayHTML;
+                quizBox.appendChild(tempDiv);
+                temporaryCongratsOverlay = tempDiv;
+            }
+            congratsInQuizBox = temporaryCongratsOverlay; // 使用找到的或新創建的
+        }
+
+
+        congratsInQuizBox.style.display = 'flex';
+        const stars = congratsInQuizBox.querySelectorAll('.congrats-star');
+        stars.forEach(star => {
+            star.style.animation = 'none';
+            star.offsetHeight; 
+            star.style.animation = ''; 
+        });
+        const messageElement = congratsInQuizBox.querySelector('#congrats-message');
+        messageElement.style.animation = 'none';
+        messageElement.offsetHeight; 
+        messageElement.style.animation = '';
+
+        setTimeout(() => {
+            congratsInQuizBox.style.display = 'none';
+        }, 2800); 
+    }
+    
+    window.onload = function() {
+        showDirectInputMode(); 
+        updatePracticedCharactersDisplay(); 
+        const quizBox = document.getElementById('quiz-display');
+        let initialCongratsOverlay = quizBox.querySelector('#congrats-overlay');
+        if(!initialCongratsOverlay) { // 如果HTML中初始沒有，動態創建一次並隱藏
+             const overlayHTML = `
+                <div id="congrats-message">你真棒!<span class="thumbs-up-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"></path></svg></span></div>
+                <div class="stars-container">
+                  <span class="congrats-star"><svg viewBox="0 0 26 26"><path d="M12 .5l3.09 6.26L22 7.72l-5.46 5.3L17.91 21.5 12 18.27 6.09 21.5l1.36-7.98L2 7.72l6.91-1.01L12 .5z" fill="#FFD700" stroke="#E7B000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  <span class="congrats-star"><svg viewBox="0 0 26 26"><path d="M12 .5l3.09 6.26L22 7.72l-5.46 5.3L17.91 21.5 12 18.27 6.09 21.5l1.36-7.98L2 7.72l6.91-1.01L12 .5z" fill="#FFD700" stroke="#E7B000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  <span class="congrats-star"><svg viewBox="0 0 26 26"><path d="M12 .5l3.09 6.26L22 7.72l-5.46 5.3L17.91 21.5 12 18.27 6.09 21.5l1.36-7.98L2 7.72l6.91-1.01L12 .5z" fill="#FFD700" stroke="#E7B000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </div>`;
+            initialCongratsOverlay = document.createElement('div');
+            initialCongratsOverlay.id = 'congrats-overlay';
+            // 從CSS複製關鍵樣式，或確保CSS會正確應用
+            initialCongratsOverlay.style.position = 'absolute'; 
+            initialCongratsOverlay.style.top = '0'; initialCongratsOverlay.style.left = '0';
+            initialCongratsOverlay.style.width = '100%'; initialCongratsOverlay.style.height = '100%';
+            initialCongratsOverlay.style.zIndex = '10';
+            initialCongratsOverlay.style.pointerEvents = 'none';
+            initialCongratsOverlay.style.overflow = 'hidden';
+            initialCongratsOverlay.style.backgroundColor = 'rgba(255, 255, 255, 0.85)';
+            initialCongratsOverlay.style.borderRadius = '8px';
+            initialCongratsOverlay.style.flexDirection = 'column';
+            initialCongratsOverlay.style.alignItems = 'center';
+            initialCongratsOverlay.style.justifyContent = 'center';
+            initialCongratsOverlay.innerHTML = overlayHTML;
+            quizBox.appendChild(initialCongratsOverlay);
+        }
+        initialCongratsOverlay.style.display = 'none'; // 確保初始隱藏
+    };
+
+  </script>
+</body>
+</html>
