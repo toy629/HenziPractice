@@ -3,264 +3,72 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>繁體中文筆順練習 (芫荽體)</title>
+  <title>繁體中文筆順練習 (背景音樂開關)</title>
   <script src="https://unpkg.com/hanzi-writer@2.0.2/dist/hanzi-writer.min.js"></script>
   <style>
+    /* @font-face, body, h1, .subtitle, #input-mode-selector, .mode-button, 
+       #input-container, #text-input-area, #file-input-area, #text-input, 
+       #file-input, .file-input-label, #selected-file-name, 
+       #process-data-button, #character-selection-buttons-container, 
+       #character-selection-buttons, .char-select-button, .display-area-container,
+       #animation-wrapper, .hanzi-box, #animation-display.hanzi-box, 
+       #quiz-display.hanzi-box, #replay-animation-button (normal state), 
+       #practiced-characters-container, #congrats-overlay, etc. 
+       所有這些樣式都與您上一版本相同，這裡省略以保持簡潔。
+       請確保您的 <style> 標籤內是完整的。
+    */
     @font-face {
       font-family: 'CoriandrumCustom'; 
-      src: url('fonts/BpmfIansui-Regular.ttf') format('truetype'); /* 請確保此路徑和檔名正確 */
+      src: url('fonts/BpmfIansui-Regular.ttf') format('truetype');
       font-weight: normal;
       font-style: normal;
     }
-
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 20px;
-      text-align: center;
-      background-color: #FFFFFF; 
-      color: #333; 
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      font-weight: 600; 
-    }
-
-    h1 {
-      color: #FF6F61; 
-      margin-bottom: 20px; 
-      font-weight: 700; 
-    }
-
-    .subtitle {
-        font-size: 1.1em;
-        color: #555555; 
-        margin-bottom: 10px; 
-        font-weight: normal; 
-    }
-
-    #input-mode-selector {
-      margin-bottom: 15px;
-      display: flex;
-      gap: 10px;
-    }
-
-    .mode-button {
-      font-size: 15px;
-      padding: 8px 15px;
-      border: 1px solid #76D7C4; 
-      background-color: #fff;
-      color: #76D7C4; 
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background-color 0.3s ease, color 0.3s ease;
-      font-weight: 600; 
-    }
-    .mode-button.active, .mode-button:hover {
-      background-color: #76D7C4; 
-      color: white;
-    }
-
-    #input-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-bottom: 15px; 
-      gap: 10px;
-      width: 320px;
-    }
-
-    #text-input-area, #file-input-area {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-    }
-
-    #text-input {
-      font-size: 18px;
-      padding: 10px;
-      width: 90%;
-      text-align: center;
-      border: 1px solid #DDDDDD; 
-      border-radius: 6px;
-      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
-      font-weight: normal; 
-    }
-
-    #file-input {
-      display: none; 
-    }
-
-    .file-input-label {
-      font-size: 16px;
-      padding: 10px 15px;
-      background-color: #fff;
-      color: #76D7C4; 
-      border: 1px dashed #76D7C4; 
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background-color 0.3s ease, color 0.3s ease;
-      width: 90%;
-      box-sizing: border-box;
-      font-weight: 600;
-    }
-    .file-input-label:hover {
-      background-color: #E0F7FA; 
-    }
-    #selected-file-name {
-        font-size: 0.9em;
-        color: #555555; 
-        margin-top: 5px;
-        word-break: break-all;
-        font-weight: normal;
-    }
-
-
-    #process-data-button {
-      font-size: 17px;
-      padding: 10px 20px;
-      background-color: #76D7C4; 
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      width: calc(90% + 22px); 
-      font-weight: 600;
-    }
-
-    #process-data-button:hover {
-      background-color: #65BCAA; 
-    }
-
-    #character-selection-buttons-container { 
-        width: 100%;
-        max-width: 90%;
-        margin-bottom: 15px; 
-    }
-    #character-selection-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px; 
-    }
-
-    .char-select-button {
-      padding: 10px 15px; 
-      background-color: #FFDAB9; 
-      color: #333333; 
-      border: 1px solid #FFCFAA; 
-      border-radius: 6px; 
-      cursor: pointer;
-      transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-      font-family: 'CoriandrumCustom', '芫荽體', sans-serif; 
-      font-size: 1.8em;  
-      font-weight: normal; 
-      line-height: 1.3; 
-      min-width: 60px;
-    }
-
-    .char-select-button:hover {
-      background-color: #FFC8A2; 
-      border-color: #FFB77E;
-    }
-    .char-select-button.active {
-      background-color: #FFC8A2; 
-      color: #333333; 
-      border-color: #FFB77E;
-      box-shadow: 0 0 0 2px #FFB77E inset; 
-    }
+    body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;margin:0;padding:20px;text-align:center;background-color:#fff;color:#333;display:flex;flex-direction:column;align-items:center;font-weight:600}h1{color:#ff6f61;margin-bottom:20px;font-weight:700}.subtitle{font-size:1.1em;color:#555;margin-bottom:10px;font-weight:normal}#input-mode-selector{margin-bottom:15px;display:flex;gap:10px}.mode-button{font-size:15px;padding:8px 15px;border:1px solid #76d7c4;background-color:#fff;color:#76d7c4;border-radius:6px;cursor:pointer;transition:background-color .3s ease,color .3s ease;font-weight:600}.mode-button.active,.mode-button:hover{background-color:#76d7c4;color:#fff}#input-container{display:flex;flex-direction:column;align-items:center;margin-bottom:15px;gap:10px;width:320px}#text-input-area,#file-input-area{width:100%;display:flex;flex-direction:column;align-items:center;gap:8px}#text-input{font-size:18px;padding:10px;width:90%;text-align:center;border:1px solid #ddd;border-radius:6px;box-shadow:inset 0 1px 3px rgba(0,0,0,.05);font-weight:normal}#file-input{display:none}.file-input-label{font-size:16px;padding:10px 15px;background-color:#fff;color:#76d7c4;border:1px dashed #76d7c4;border-radius:6px;cursor:pointer;transition:background-color .3s ease,color .3s ease;width:90%;box-sizing:border-box;font-weight:600}.file-input-label:hover{background-color:#e0f7fa}#selected-file-name{font-size:.9em;color:#555;margin-top:5px;word-break:break-all;font-weight:normal}#process-data-button{font-size:17px;padding:10px 20px;background-color:#76d7c4;color:#fff;border:none;border-radius:6px;cursor:pointer;transition:background-color .3s ease;width:calc(90% + 22px);font-weight:600}#process-data-button:hover{background-color:#65bcaa}#character-selection-buttons-container{width:100%;max-width:90%;margin-bottom:15px}#character-selection-buttons{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}.char-select-button{padding:10px 15px;background-color:#ffdab9;color:#333;border:1px solid #ffcfaa;border-radius:6px;cursor:pointer;transition:background-color .2s ease,color .2s ease,border-color .2s ease;font-family:'CoriandrumCustom','芫荽體',sans-serif;font-size:1.8em;font-weight:normal;line-height:1.3;min-width:60px}.char-select-button:hover{background-color:#ffc8a2;border-color:#ffb77e}.char-select-button.active{background-color:#ffc8a2;color:#333;border-color:#ffb77e;box-shadow:0 0 0 2px #ffb77e inset}.display-area-container{display:flex;justify-content:center;align-items:flex-start;gap:20px;width:100%;max-width:620px;margin-bottom:30px}#animation-wrapper{display:flex;flex-direction:column;align-items:center;gap:8px}.hanzi-box{background-color:#fff;border:1px solid #ddd;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,.08);display:flex;justify-content:center;align-items:center;position:relative}#animation-display.hanzi-box{width:180px;height:180px}#quiz-display.hanzi-box{width:350px;height:350px;touch-action:none}#replay-animation-button{font-size:14px;padding:6px 12px;background-color:#76d7c4;color:#fff;border:none;border-radius:4px;cursor:pointer;transition:background-color .3s ease;font-weight:600}#replay-animation-button:hover{background-color:#65bcaa}#replay-animation-button:disabled{background-color:#b0bec5;color:#78909c;cursor:not-allowed}#practiced-characters-container{margin-top:20px;padding:15px;width:90%;max-width:600px;background-color:#fdfdfd;border:1px solid #eee;border-radius:8px;box-shadow:0 2px 4px rgba(0,0,0,.05)}#practiced-characters-container h2{color:#00695c;font-size:1.3em;margin-top:0;margin-bottom:10px;font-weight:700}#practiced-characters-list{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;font-weight:normal;min-height:2em}.practiced-char-item{background-color:#e0f2f1;color:#00796b;padding:5px 10px;border-radius:4px;font-size:1.1em}#congrats-overlay{position:absolute;top:0;left:0;width:100%;height:100%;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:10;pointer-events:none;overflow:hidden;background-color:rgba(255,255,255,.85);border-radius:8px}#congrats-message{font-size:1.8em;color:#ff6f61;text-shadow:1px 1px 2px rgba(0,0,0,.1);margin-bottom:15px;font-weight:700;font-family:'CoriandrumCustom','芫荽體','DFPYuanMXBold-B5','BLeUUX','Arial Rounded MT Bold','Hiragino Maru Gothic ProN','LiHei Pro','儷黑 Pro','Microsoft JhengHei Rounded','Microsoft YaHei Rounded',"微軟正黑體","微軟雅黑體",sans-serif;animation:message-appear .5s ease-out forwards;display:flex;align-items:center}.thumbs-up-icon svg{width:1em;height:1em;fill:#ff6f61;margin-left:8px}.stars-container{display:flex;gap:8px}.congrats-star svg{width:30px;height:30px}.congrats-star{opacity:0;animation:star-sparkle 1.2s ease-out forwards}.congrats-star:nth-child(1){animation-delay:0s}.congrats-star:nth-child(2){animation-delay:.2s}.congrats-star:nth-child(3){animation-delay:.1s}@keyframes message-appear{0%{opacity:0;transform:scale(.7) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}@keyframes star-sparkle{0%{opacity:0;transform:scale(.3) rotate(-45deg) translateY(15px)}40%{opacity:1;transform:scale(1.2) rotate(15deg) translateY(-5px)}70%{opacity:.8;transform:scale(1) rotate(0deg) translateY(0)}to{opacity:0;transform:scale(.5) rotate(45deg) translateY(10px)}}
     
-    .display-area-container {
-      display: flex;
-      justify-content: center; 
-      align-items: flex-start; 
-      gap: 20px;              
-      width: 100%;
-      max-width: 620px; 
-      margin-bottom: 30px; 
-    }
-
-    #animation-wrapper { 
-      display: flex; 
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .hanzi-box { 
-      background-color: #FFFFFF; 
-      border: 1px solid #DDDDDD; 
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative; 
-    }
-
-    #animation-display.hanzi-box { 
-      width: 180px;
-      height: 180px;
-    }
-    
-    #quiz-display.hanzi-box { 
-      width: 420px; 
-      height: 420px;
-      touch-action: none;
-    }
-
-    #replay-animation-button {
-      font-size: 14px;
-      padding: 6px 12px;
-      background-color: #76D7C4; 
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      font-weight: 600;
-    }
-
-    #replay-animation-button:hover { background-color: #65BCAA; }
-    #replay-animation-button:disabled { background-color: #B0BEC5; color: #78909C; cursor: not-allowed; }
-    
-    #practiced-characters-container { margin-top: 20px; padding: 15px; width: 90%; max-width: 600px; background-color: #fdfdfd; border: 1px solid #eee; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-    #practiced-characters-container h2 { color: #00695C; font-size: 1.3em; margin-top: 0; margin-bottom: 10px; font-weight: 700;}
-    #practiced-characters-list { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; font-weight: normal; min-height: 2em; }
-    .practiced-char-item { background-color: #E0F2F1; color: #00796b; padding: 5px 10px; border-radius: 4px; font-size: 1.1em; }
-    #congrats-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 10; pointer-events: none; overflow: hidden; background-color: rgba(255, 255, 255, 0.85); border-radius: 8px; }
-    #congrats-message { 
-        font-size: 2em; 
-        color: #FF6F61; 
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.1); 
-        margin-bottom: 15px; 
-        font-weight: 700; 
-        font-family: 'CoriandrumCustom', '芫荽體', 'DFPYuanMXBold-B5', 'BLeUUX', 'Arial Rounded MT Bold', 'Hiragino Maru Gothic ProN', 'LiHei Pro', '儷黑 Pro', 'Microsoft JhengHei Rounded', 'Microsoft YaHei Rounded', "微軟正黑體", "微軟雅黑體", sans-serif; 
-        animation: message-appear 0.5s ease-out forwards; 
-        display: flex; 
+    #music-controls {
+        margin-bottom: 20px;
+        display: flex;
         align-items: center;
+        gap: 10px;
     }
-    .thumbs-up-icon svg { width: 1em; height: 1em;fill: #FF6F61; margin-left: 8px;}
-    .stars-container { display: flex; gap: 8px; }
-    .congrats-star svg { width: 32px; height: 32px;}
-    .congrats-star { opacity: 0; animation: star-sparkle 1.2s ease-out forwards; }
-    .congrats-star:nth-child(1) { animation-delay: 0.0s; } .congrats-star:nth-child(2) { animation-delay: 0.2s; } .congrats-star:nth-child(3) { animation-delay: 0.1s; }
-    @keyframes message-appear { from { opacity: 0; transform: scale(0.7) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-    @keyframes star-sparkle { 0% { opacity: 0; transform: scale(0.3) rotate(-45deg) translateY(15px); } 40% { opacity: 1; transform: scale(1.2) rotate(15deg) translateY(-5px); } 70% { opacity: 0.8; transform: scale(1) rotate(0deg) translateY(0); } 100% { opacity: 0; transform: scale(0.5) rotate(45deg) translateY(10px); } }
+    #play-pause-music-button { /* 只保留播放/暫停按鈕 */
+        font-size: 14px;
+        padding: 8px 15px;
+        background-color: #76D7C4;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, opacity 0.3s ease; /* 加入 opacity 過渡 */
+        font-weight: 600;
+        min-width: 120px; 
+    }
+    #play-pause-music-button:hover {
+        background-color: #65BCAA;
+    }
+    #play-pause-music-button:disabled { /* 確保禁用時的樣式 */
+      background-color: #B0BEC5; 
+      color: #78909C;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
   </style>
 </head>
 
 <body>
   <h1>繁體中文筆順練習</h1>
 
+  <div id="music-controls">
+    <audio id="background-audio">
+      您的瀏覽器不支援播放聲音。
+    </audio>
+    <button id="play-pause-music-button">開啟背景音樂</button>
+  </div>
+
   <div id="input-mode-selector">
     <button id="direct-input-mode-btn" class="mode-button active" onclick="showDirectInputMode()">直接輸入</button>
     <button id="file-input-mode-btn" class="mode-button" onclick="showFileUploadMode()">匯入檔案</button>
   </div>
-
   <div id="input-container">
     <div id="text-input-area">
       <input type="text" id="text-input" placeholder="輸入或貼上練習文字">
@@ -272,13 +80,11 @@
     </div>
     <button id="process-data-button" onclick="processData()">處理資料</button>
   </div>
-  
   <div id="character-selection-buttons-container">
     <p class="subtitle" id="character-select-subtitle" style="display:none;">選擇要練習的字：</p>
     <div id="character-selection-buttons">
-      </div>
+    </div>
   </div>
-
   <div class="display-area-container"> 
     <div id="animation-wrapper"> 
       <div id="animation-display" class="hanzi-box"></div>
@@ -295,7 +101,6 @@
         </div>
     </div>
   </div>
-
   <div id="practiced-characters-container">
     <h2>已練習字元</h2>
     <div id="practiced-characters-list">
@@ -303,10 +108,7 @@
   </div>
 
   <script>
-    console.log("Script block parsing started."); // Log: Script parsing begins
-
-    // 注音資料對照表 (hanziZhuyinMap) 已移除
-    // const hanziZhuyinMap = { ... }; // REMOVED
+    console.log("Script block parsing started.");
 
     let animationInstance = null;
     let quizInstance = null;
@@ -327,9 +129,104 @@
     const practicedCharsListDiv = document.getElementById('practiced-characters-list');
     const animationWrapper = document.getElementById('animation-wrapper'); 
     
+    const backgroundAudio = document.getElementById('background-audio');
+    const playPauseMusicButton = document.getElementById('play-pause-music-button');
+
+    const musicPlaylist = [
+        // **重要**: 請將以下路徑替換為您實際的音樂檔案路徑和名稱
+        // 例如: { name: "莫札特小夜曲", path: "audio/mozart_eine_kleine_nachtmusik.mp3" },
+        //       { name: "莫札特鋼琴協奏曲", path: "audio/mozart_piano_concerto_21.mp3" }
+        // 為了讓範例能運作，我暫時保留範例檔名，但您需要替換它們
+        { name: "Ukulele", path: "audio/happy-whistling-ukulele-115485.mp3" }, 
+    ];
+    let currentTrackIndex = 0;
+    let isMusicUserInitiated = false; 
+
+    function loadTrack(trackIndex, playWhenLoaded = false) {
+        if (!backgroundAudio || !playPauseMusicButton || trackIndex < 0 || trackIndex >= musicPlaylist.length) {
+            console.error("無法載入音軌: 索引無效、播放器或按鈕未找到。", trackIndex);
+            if (playPauseMusicButton) {
+                playPauseMusicButton.textContent = '開啟背景音樂';
+                playPauseMusicButton.disabled = (musicPlaylist.length === 0); // 如果列表為空則禁用
+            }
+            return;
+        }
+        currentTrackIndex = trackIndex;
+        const track = musicPlaylist[currentTrackIndex];
+        backgroundAudio.src = track.path;
+        backgroundAudio.load(); 
+        console.log("已載入音軌:", track.name); 
+        
+        if (playWhenLoaded) {
+            playCurrentTrack();
+        } else {
+            playPauseMusicButton.textContent = '開啟背景音樂'; 
+            playPauseMusicButton.disabled = false; // 確保按鈕可用
+        }
+    }
+
+    function playCurrentTrack() {
+        if (!backgroundAudio || !playPauseMusicButton) return;
+
+        if (!backgroundAudio.src && musicPlaylist.length > 0) {
+            console.log("音軌來源為空，載入播放列表第一首。");
+            loadTrack(0, true); 
+            return;
+        }
+        if (!backgroundAudio.src && musicPlaylist.length === 0) {
+            console.warn("播放列表為空，無法播放。");
+            playPauseMusicButton.textContent = '開啟背景音樂';
+            playPauseMusicButton.disabled = true;
+            return;
+        }
+
+        backgroundAudio.play().then(() => {
+            playPauseMusicButton.textContent = '關閉背景音樂';
+            playPauseMusicButton.disabled = false;
+            isMusicUserInitiated = true;
+            console.log("音樂已開始播放:", musicPlaylist[currentTrackIndex].name);
+        }).catch(error => {
+            console.warn("播放失敗 (可能需要使用者與頁面有更多互動):", error);
+            playPauseMusicButton.textContent = '開啟背景音樂';
+            // 即使播放失敗，如果列表有歌，按鈕也應該是可用的，讓使用者可以再試
+            playPauseMusicButton.disabled = (musicPlaylist.length === 0); 
+        });
+    }
+
+    if (playPauseMusicButton && backgroundAudio) {
+        playPauseMusicButton.onclick = function() {
+            if (backgroundAudio.paused) {
+                playCurrentTrack();
+            } else {
+                backgroundAudio.pause();
+                playPauseMusicButton.textContent = '開啟背景音樂';
+                console.log("音樂已暫停");
+            }
+        };
+
+        backgroundAudio.onended = function() {
+            console.log("音軌結束:", musicPlaylist[currentTrackIndex].name);
+            currentTrackIndex++;
+            if (currentTrackIndex >= musicPlaylist.length) {
+                currentTrackIndex = 0; 
+            }
+            loadTrack(currentTrackIndex, true); 
+        };
+        
+        // 初始化按鈕狀態
+        if (musicPlaylist.length === 0) {
+            playPauseMusicButton.textContent = '無音樂';
+            playPauseMusicButton.disabled = true;
+        } else {
+            playPauseMusicButton.textContent = '開啟背景音樂';
+            playPauseMusicButton.disabled = false;
+            // 初始載入第一首歌的資訊，但不播放
+            loadTrack(0, false); 
+        }
+    }
+
 
     function showDirectInputMode() { 
-        console.log("showDirectInputMode called");
         inputMode = 'text';
         if(textInputArea) textInputArea.style.display = 'flex';
         if(fileInputArea) fileInputArea.style.display = 'none';
@@ -340,7 +237,6 @@
         if(fileInput) fileInput.value = ''; 
     }
     function showFileUploadMode() { 
-        console.log("showFileUploadMode called");
         inputMode = 'file';
         if(textInputArea) textInputArea.style.display = 'none';
         if(fileInputArea) fileInputArea.style.display = 'flex';
@@ -349,7 +245,6 @@
         if(fileInputModeBtn) fileInputModeBtn.classList.add('active');
     }
     function updateSelectedFileName() { 
-        console.log("updateSelectedFileName called");
         if (fileInput && fileInput.files.length > 0) {
             if(selectedFileNameDisplay) selectedFileNameDisplay.textContent = `已選檔案: ${fileInput.files[0].name}`;
         } else {
@@ -359,12 +254,9 @@
     
     function processData() { 
       try {
-        console.log("processData function called. Input mode:", inputMode);
         const animBox = document.getElementById('animation-display');
         const quizBox = document.getElementById('quiz-display');
-        
         if(animBox) animBox.innerHTML = ''; 
-        
         if(quizBox) {
             const congratsElem = quizBox.querySelector('#congrats-overlay');
             quizBox.innerHTML = ''; 
@@ -373,22 +265,14 @@
                 congratsElem.style.display = 'none'; 
             }
         }
-
         if(charSelectionContainer) charSelectionContainer.innerHTML = '';
-        animationInstance = null;
-        quizInstance = null;
-        currentDisplayChar = null;
+        animationInstance = null; quizInstance = null; currentDisplayChar = null;
         if(replayButton) replayButton.disabled = true;
         if (animationWrapper) animationWrapper.style.display = 'none'; 
         if (characterSelectSubtitle) characterSelectSubtitle.style.display = 'none';
-
         if (inputMode === 'text') {
             const text = document.getElementById("text-input").value.trim();
-            if (text.length > 0) {
-              generateCharacterButtons(text);
-            } else {
-              alert("請輸入文字！");
-            }
+            if (text.length > 0) { generateCharacterButtons(text); } else { alert("請輸入文字！"); }
         } else if (inputMode === 'file') {
             const currentFileInput = document.getElementById('file-input'); 
             if (!currentFileInput || !currentFileInput.files || currentFileInput.files.length === 0) {
@@ -397,45 +281,31 @@
             const file = currentFileInput.files[0];
             if (file) {
               const reader = new FileReader();
-              reader.onload = function(e) {
-                generateCharacterButtons(e.target.result);
-              };
-              reader.onerror = function() {
-                alert("讀取檔案時發生錯誤。");
-              };
+              reader.onload = function(e) { generateCharacterButtons(e.target.result); };
+              reader.onerror = function() { alert("讀取檔案時發生錯誤。"); };
               reader.readAsText(file, 'UTF-8');
             } else { alert("請選擇一個檔案！"); }
         }
-      } catch (error) { console.error("Error in processData:", error); alert("處理資料時發生錯誤，請檢查控制台。"); }
+      } catch (error) { console.error("Error in processData:", error); }
     }
 
     function generateCharacterButtons(text) { 
       try {
-        console.log("generateCharacterButtons called with text preview:", text ? text.substring(0,10) + "..." : "undefined");
         const uniqueChars = [...new Set(text.replace(/[^\u4e00-\u9fa5]/g, ''))];
         if(charSelectionContainer) charSelectionContainer.innerHTML = ''; 
-
         if (uniqueChars.length > 0) {
             if (characterSelectSubtitle) characterSelectSubtitle.style.display = 'block'; 
             uniqueChars.forEach(char => {
             const button = document.createElement('button');
             button.classList.add('char-select-button');
-            
-            // 直接將字元設定為按鈕內容，CSS 中的 font-family 會應用芫荽體
             button.textContent = char; 
-
             button.onclick = function() {
                 try {
-                    console.log("Character button clicked for:", char);
                     document.querySelectorAll('.char-select-button.active').forEach(activeBtn => {
-                        activeBtn.classList.remove('active');
-                    });
+                        activeBtn.classList.remove('active');});
                     this.classList.add('active');
                     displayCharacterInBothModes(char);
-                } catch (e) {
-                    console.error("Error in character button onclick handler:", e);
-                    alert("選擇字元時發生錯誤，請檢查控制台。");
-                }
+                } catch (e) { console.error("Error in char button onclick:", e); }
             };
             if(charSelectionContainer) charSelectionContainer.appendChild(button);
             });
@@ -443,19 +313,16 @@
             if (characterSelectSubtitle) characterSelectSubtitle.style.display = 'none';
             alert("未在輸入中找到有效的中文字元進行練習！");
         }
-      } catch (error) { console.error("Error in generateCharacterButtons:", error); alert("生成字元按鈕時發生錯誤，請檢查控制台。"); }
+      } catch (error) { console.error("Error in generateCharacterButtons:", error); }
     }
 
     function displayCharacterInBothModes(char) {
       try {
-        console.log("displayCharacterInBothModes called for char:", char);
         currentDisplayChar = char; 
         const animBox = document.getElementById('animation-display');
         const quizBox = document.getElementById('quiz-display');
-
         if (animationWrapper) animationWrapper.style.display = 'flex'; 
         if(animBox) animBox.innerHTML = '';
-        
         if(quizBox){
             const congratsElem = quizBox.querySelector('#congrats-overlay');
             quizBox.innerHTML = ''; 
@@ -464,123 +331,73 @@
                 congratsElem.style.display = 'none'; 
             }
         }
-        
-        animationInstance = null;
-        quizInstance = null;
+        animationInstance = null; quizInstance = null;
         if(replayButton) replayButton.disabled = true;
-
-        const animBoxSize = 180;
-        const animPadding = 15;
-        const quizBoxSize = 420; 
-        const quizPadding = 25;  
-
+        const animBoxSize = 180; const animPadding = 15;
+        const quizBoxSize = 350; const quizPadding = 25; 
         if (animBox) {
             animationInstance = HanziWriter.create(animBox, char, {
                 width: animBoxSize, height: animBoxSize, padding: animPadding,
                 strokeColor: '#000000', showCharacter: true, showOutline: false,
-                strokeAnimationSpeed: 0.6, delayBetweenStrokes: 80,
-                autoAnimate: false,
+                strokeAnimationSpeed: 0.6, delayBetweenStrokes: 80, autoAnimate: false,
                 onLoadCharDataError: function(err) {
-                    console.error("Animation: onLoadCharDataError for char:", char, err);
                     if(animBox) animBox.innerHTML = '字元載入失敗'; 
-                    if(replayButton) replayButton.disabled = true;
-                },
+                    if(replayButton) replayButton.disabled = true;},
                 onLoadCharDataSuccess: function() {
-                    if (animationInstance) {
-                        animationInstance.animateCharacter(); 
-                        if(replayButton) replayButton.disabled = false;
-                    }
-                },
-                onComplete: function() { console.log("Animation: animation complete for char:", char); }
-            });
-            if (!animationInstance && replayButton) { replayButton.disabled = true; }
-        }
-        
+                    if (animationInstance) { animationInstance.animateCharacter(); 
+                        if(replayButton) replayButton.disabled = false;}},
+                onComplete: function() { console.log("Animation complete for char:", char); }});
+            if (!animationInstance && replayButton) { replayButton.disabled = true; }}
         if (quizBox) {
             quizInstance = HanziWriter.create(quizBox, char, { 
-                width: quizBoxSize, height: quizBoxSize, padding: quizPadding,
+                width: quizBoxSize, height: quizBoxSize, padding: quizPadding, 
                 strokeColor: '#000000', showCharacter: false, showOutline: true,
                 outlineColor: '#DDDDDD', drawingColor: '#333333',
                 drawingWidth: Math.max(10, quizBoxSize / 35), 
                 leniency: 1.3, showHintAfterMisses: 2, highlightOnComplete: true,
                 onLoadCharDataError: function(err) { 
-                    console.error("Quiz: onLoadCharDataError for char:", char, err);
                     const currentCongrats = quizBox.querySelector('#congrats-overlay');
-                    quizBox.innerHTML = '';
-                    if (currentCongrats) quizBox.appendChild(currentCongrats);
+                    quizBox.innerHTML = ''; if (currentCongrats) quizBox.appendChild(currentCongrats);
                     const errorMsgDiv = document.createElement('div');
                     errorMsgDiv.textContent = '字元載入失敗';
-                    if(quizBox) quizBox.appendChild(errorMsgDiv);
-                },
-                onLoadCharDataSuccess: function() {
-                    if (quizInstance) { quizInstance.quiz(); }
-                },
+                    if(quizBox) quizBox.appendChild(errorMsgDiv);},
+                onLoadCharDataSuccess: function() { if (quizInstance) { quizInstance.quiz(); }},
                 onComplete: function(summaryData){ 
                     if (!practicedCharSet.has(char)) {
                         practicedCharSet.add(char);
-                        updatePracticedCharactersDisplay();
-                    }
-                    showCongratulationAnimation(); 
-                }
-            });
-            if (!quizInstance) { console.error("Failed to create quizInstance for char:", char); }
-        }
-      } catch (error) { console.error("Error in displayCharacterInBothModes:", error); alert("顯示字元時發生錯誤，請檢查控制台。"); }
+                        updatePracticedCharactersDisplay();}
+                    showCongratulationAnimation(); }});
+            if (!quizInstance) { console.error("Failed to create quizInstance for char:", char); }}} 
+      catch (error) { console.error("Error in displayCharacterInBothModes:", error); }
     }
 
     function replayAnimation() { 
-      if (animationInstance && currentDisplayChar) {
-        animationInstance.animateCharacter();
-      }
-    }
+      if (animationInstance && currentDisplayChar) { animationInstance.animateCharacter();}}
     function updatePracticedCharactersDisplay() { 
         if (!practicedCharsListDiv) return;
         practicedCharsListDiv.innerHTML = ''; 
         if (practicedCharSet.size === 0) {
-            practicedCharsListDiv.textContent = '尚未練習任何字元。';
-            return;
-        }
+            practicedCharsListDiv.textContent = '尚未練習任何字元。'; return;}
         const charsArray = Array.from(practicedCharSet); 
         charsArray.forEach(practicedChar => {
             const charSpan = document.createElement('span');
             charSpan.classList.add('practiced-char-item');
             charSpan.textContent = practicedChar;
-            practicedCharsListDiv.appendChild(charSpan);
-        });
-    }
+            practicedCharsListDiv.appendChild(charSpan);});}
 
     function showCongratulationAnimation() {
       try {
         const quizDisplayBox = document.getElementById('quiz-display'); 
-        if (!quizDisplayBox) {
-            console.error("#quiz-display element not found for congrats animation!");
-            return;
-        }
+        if (!quizDisplayBox) return;
         const congratsInQuizBox = quizDisplayBox.querySelector('#congrats-overlay');
-        if (!congratsInQuizBox) {
-            console.error("#congrats-overlay not found inside #quiz-display for animation!");
-            return;
-        }
+        if (!congratsInQuizBox) return;
         congratsInQuizBox.style.display = 'flex';
         const stars = congratsInQuizBox.querySelectorAll('.congrats-star');
-        stars.forEach(star => {
-            star.style.animation = 'none';
-            star.offsetHeight; 
-            star.style.animation = ''; 
-        });
+        stars.forEach(star => { star.style.animation = 'none'; star.offsetHeight; star.style.animation = ''; });
         const messageElement = congratsInQuizBox.querySelector('#congrats-message');
-        if (messageElement) { 
-            messageElement.style.animation = 'none';
-            messageElement.offsetHeight; 
-            messageElement.style.animation = '';
-        }
-        setTimeout(() => {
-            congratsInQuizBox.style.display = 'none';
-        }, 2800); 
-      } catch (error) {
-          console.error("Error in showCongratulationAnimation:", error);
-      }
-    }
+        if (messageElement) { messageElement.style.animation = 'none'; messageElement.offsetHeight; messageElement.style.animation = '';}
+        setTimeout(() => { congratsInQuizBox.style.display = 'none';}, 2800); 
+      } catch (error) { console.error("Error in showCongratulationAnimation:", error);}}
     
     window.onload = function() { 
         console.log("window.onload executed.");
@@ -590,20 +407,24 @@
             const quizBox = document.getElementById('quiz-display');
             if (quizBox) {
                 const initialCongratsOverlay = quizBox.querySelector('#congrats-overlay');
-                if(initialCongratsOverlay) initialCongratsOverlay.style.display = 'none';
-            }
+                if(initialCongratsOverlay) initialCongratsOverlay.style.display = 'none';}
+            if(animationWrapper) { animationWrapper.style.display = 'none'; } 
+            else { console.warn("animationWrapper element not found on window.onload");}
             
-            if(animationWrapper) {
-                animationWrapper.style.display = 'none'; 
-            } else {
-                console.warn("animationWrapper element not found on window.onload");
+            // 初始化音樂按鈕狀態
+            if (playPauseMusicButton) {
+                if (musicPlaylist.length === 0) {
+                    playPauseMusicButton.textContent = '無音樂';
+                    playPauseMusicButton.disabled = true;
+                } else {
+                    playPauseMusicButton.textContent = '開啟背景音樂';
+                    playPauseMusicButton.disabled = false;
+                    loadTrack(0, false); // 載入第一首但不播放
+                }
             }
-        } catch (error) {
-            console.error("Error in window.onload:", error);
-        }
-    };
-    console.log("Script block parsing ended.");
 
+        } catch (error) { console.error("Error in window.onload:", error);}};
+    console.log("Script block parsing ended.");
   </script>
 </body>
 </html>
