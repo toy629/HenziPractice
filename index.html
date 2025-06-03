@@ -4,326 +4,92 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>繁體中文筆順練習 (響應式版)</title>
-  <script src="hanzi-writer.min.js"></script>
-  <style>
+  <title>繁體中文筆順練習 (音樂功能修正)</title>
+  <script src="hanzi-writer.min.js"></script> <style>
     @font-face {
       font-family: 'CoriandrumCustom'; 
       src: url('fonts/BpmfIansui-Regular.ttf') format('truetype');
       font-weight: normal;
       font-style: normal;
     }
-    body{
-      font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
-      margin:0;
-      padding:10px; 
-      text-align:center;
-      background-color:#fff;
-      color:#333;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      font-weight:600;
-      box-sizing: border-box;
-      min-height: 100vh; /* 確保 body 至少和視窗一樣高 */
-    }
-    h1{
-      color:#ff6f61;
-      margin-bottom:15px;
-      font-weight:700;
-      font-size: 1.8em;
-    }
-    .subtitle{
-      font-size:1em;
-      color:#555;
-      margin-bottom:10px;
-      font-weight:normal
-    }
-    #input-mode-selector{
-      margin-bottom:15px;
-      display:flex;
-      flex-wrap: wrap; 
-      justify-content: center; 
-      gap:10px
-    }
-    .mode-button{
-      font-size:15px;
-      padding:8px 15px;
-      border:1px solid #76d7c4;
-      background-color:#fff;
-      color:#76d7c4;
-      border-radius:6px;
-      cursor:pointer;
-      transition:background-color .3s ease,color .3s ease;
-      font-weight:600
-    }
-    .mode-button.active,
-    .mode-button:hover{
-      background-color:#76d7c4;
-      color:#fff
-    }
-    #input-container{
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      margin-bottom:15px;
-      gap:10px;
-      width:95%; 
-      max-width:400px;
-    }
-    #text-input-area,
-    #file-input-area{
-      width:100%;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap:8px
-    }
-    #text-input{
-      font-size:16px;
-      padding:10px;
-      width:100%; 
-      box-sizing: border-box; 
-      text-align:center;
-      border:1px solid #ddd;
-      border-radius:6px;
-      box-shadow:inset 0 1px 3px rgba(0,0,0,.05);
-      font-weight:normal
-    }
+    body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;margin:0;padding:10px;text-align:center;background-color:#fff;color:#333;display:flex;flex-direction:column;align-items:center;font-weight:600;box-sizing:border-box;min-height:100vh;}
+    h1{color:#ff6f61;margin-bottom:15px;font-weight:700;font-size:1.8em;}
+    .subtitle{font-size:1em;color:#555;margin-bottom:10px;font-weight:normal}
+    #input-mode-selector{margin-bottom:15px;display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+    .mode-button{font-size:15px;padding:8px 15px;border:1px solid #76d7c4;background-color:#fff;color:#76d7c4;border-radius:6px;cursor:pointer;transition:background-color .3s ease,color .3s ease;font-weight:600}
+    .mode-button.active,.mode-button:hover{background-color:#76d7c4;color:#fff}
+    #input-container{display:flex;flex-direction:column;align-items:center;margin-bottom:15px;gap:10px;width:95%;max-width:400px;}
+    #text-input-area,#file-input-area{width:100%;display:flex;flex-direction:column;align-items:center;gap:8px}
+    #text-input{font-size:16px;padding:10px;width:100%;box-sizing:border-box;text-align:center;border:1px solid #ddd;border-radius:6px;box-shadow:inset 0 1px 3px rgba(0,0,0,.05);font-weight:normal}
     #file-input{display:none}
-    .file-input-label{
-      font-size:16px;
-      padding:10px 15px;
-      background-color:#fff;
-      color:#76d7c4;
-      border:1px dashed #76d7c4;
-      border-radius:6px;
-      cursor:pointer;
-      transition:background-color .3s ease,color .3s ease;
-      width:100%;
-      box-sizing:border-box;
-      font-weight:600
-    }
+    .file-input-label{font-size:16px;padding:10px 15px;background-color:#fff;color:#76d7c4;border:1px dashed #76d7c4;border-radius:6px;cursor:pointer;transition:background-color .3s ease,color .3s ease;width:100%;box-sizing:border-box;font-weight:600}
     .file-input-label:hover{background-color:#e0f7fa}
-    #selected-file-name{
-      font-size:.9em;
-      color:#555;
-      margin-top:5px;
-      word-break:break-all;
-      font-weight:normal
-    }
-    #process-data-button{
-      font-size:17px;
-      padding:10px 20px;
-      background-color:#76d7c4;
-      color:#fff;
-      border:none;
-      border-radius:6px;
-      cursor:pointer;
-      transition:background-color .3s ease;
-      width:100%;
-      box-sizing:border-box;
-      font-weight:600
-    }
+    #selected-file-name{font-size:.9em;color:#555;margin-top:5px;word-break:break-all;font-weight:normal}
+    #process-data-button{font-size:17px;padding:10px 20px;background-color:#76d7c4;color:#fff;border:none;border-radius:6px;cursor:pointer;transition:background-color .3s ease;width:100%;box-sizing:border-box;font-weight:600}
     #process-data-button:hover{background-color:#65bcaa}
-    #character-selection-buttons-container{
-      width:95%;
-      max-width:600px;
-      margin-bottom:15px
-    }
-    #character-selection-buttons{
-      display:flex;
-      flex-wrap:wrap;
-      justify-content:center;
-      gap:8px
-    }
-    .char-select-button{
-      padding:8px 12px;
-      background-color:#ffdab9;
-      color:#333;
-      border:1px solid #ffcfaa;
-      border-radius:6px;
-      cursor:pointer;
-      transition:background-color .2s ease,color .2s ease,border-color .2s ease;
-      font-family:'CoriandrumCustom','芫荽體',sans-serif;
-      font-size:1.5em; 
-      font-weight:normal;
-      line-height:1.3;
-      min-width:50px
-    }
+    #character-selection-buttons-container{width:95%;max-width:600px;margin-bottom:15px}
+    #character-selection-buttons{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+    .char-select-button{padding:8px 12px;background-color:#ffdab9;color:#333;border:1px solid #ffcfaa;border-radius:6px;cursor:pointer;transition:background-color .2s ease,color .2s ease,border-color .2s ease;font-family:'CoriandrumCustom','芫荽體',sans-serif;font-size:1.5em;font-weight:normal;line-height:1.3;min-width:50px}
     .char-select-button:hover{background-color:#ffc8a2;border-color:#ffb77e}
-    .char-select-button.active{
-      background-color:#ffc8a2;
-      color:#333;
-      border-color:#ffb77e;
-      box-shadow:0 0 0 2px #ffb77e inset
-    }
+    .char-select-button.active{background-color:#ffc8a2;color:#333;border-color:#ffb77e;box-shadow:0 0 0 2px #ffb77e inset}
     
-    #practice-mode-selector {
-      margin-bottom: 15px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-    }
-    .practice-mode-button {
-      font-size: 15px;padding: 8px 15px;border: 1px solid #FF8C69;background-color: #fff;color: #FF8C69;border-radius: 6px;cursor: pointer;transition: background-color 0.3s ease, color 0.3s ease;font-weight: 600;
-    }
-    .practice-mode-button.active, 
-    .practice-mode-button:hover {
-      background-color: #FF8C69;color: white;
-    }
+    #practice-mode-selector {margin-bottom: 15px;display: flex;gap: 10px; justify-content: center;}
+    .practice-mode-button {font-size: 15px;padding: 8px 15px;border: 1px solid #FF8C69;background-color: #fff;color: #FF8C69;border-radius: 6px;cursor: pointer;transition: background-color 0.3s ease, color 0.3s ease;font-weight: 600;}
+    .practice-mode-button.active, .practice-mode-button:hover {background-color: #FF8C69;color: white;}
 
-    .display-area-container{
-      display:flex;
-      flex-direction: column; 
-      align-items: center; 
-      gap:20px;
-      width:95%;
-      /* max-width set by media query or remains flexible */
-      margin-bottom:30px
-    }
-    #animation-wrapper{
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap:8px;
-      width:100%;
-      max-width: 200px; /* Max width for animation area */
-    }
-    #quiz-area-wrapper{
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap:8px;
-      width:100%;
-      max-width: 350px; /* Max width for quiz area */
-    } 
+    .display-area-container{display:flex;flex-direction:column;align-items:center;gap:20px;width:95%;margin-bottom:30px}
+    #animation-wrapper{display:flex;flex-direction:column;align-items:center;gap:8px;width:100%;max-width:200px;}
+    #quiz-area-wrapper{display:flex;flex-direction:column;align-items:center;gap:8px;width:100%;max-width:350px;} 
 
-    .hanzi-box{
-      background-color:#fff;
-      border:1px solid #ddd;
-      border-radius:8px;
-      box-shadow:0 2px 6px rgba(0,0,0,.08);
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      position:relative;
-      box-sizing: border-box;
-      /* width and height will be set by JS or specific CSS below */
-    }
-    #animation-display.hanzi-box{
-      /* width and height set by JS */
-      /* Fallback CSS if JS fails or for initial layout */
-      width: 150px; 
-      height: 150px;
-    }
-    #quiz-display.hanzi-box{
-      /* width and height set by JS */
-      /* Fallback CSS if JS fails or for initial layout */
-      width: 280px;
-      height: 280px;
-      touch-action:none;
-    }
-
+    .hanzi-box{background-color:#fff;border:1px solid #ddd;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,.08);display:flex;justify-content:center;align-items:center;position:relative;box-sizing:border-box;}
+    #animation-display.hanzi-box{ /* Fallback CSS, JS will override */ width: 150px; height: 150px;}
+    #quiz-display.hanzi-box{ /* Fallback CSS, JS will override */ width: 280px; height: 280px; touch-action:none;}
+    
     #replay-animation-button, 
-    #hint-next-stroke-button {
-      padding: 6px 10px;
-      font-size: 0.9em;
-      /* other styles remain */
-      font-size:14px;background-color:#76d7c4;color:#fff;border:none;border-radius:4px;cursor:pointer;transition:background-color .3s ease;font-weight:600
-    }
+    #hint-next-stroke-button {padding:6px 10px;font-size:0.9em;font-size:14px;background-color:#76d7c4;color:#fff;border:none;border-radius:4px;cursor:pointer;transition:background-color .3s ease;font-weight:600}
     #replay-animation-button:hover{background-color:#65bcaa}
     #replay-animation-button:disabled{background-color:#b0bec5;color:#78909c;cursor:not-allowed}
     
-    #quiz-controls { 
-      margin-top: 0px; 
-      height: 30px; 
-      display: flex; 
-      justify-content: center; 
-      align-items: center;
-    }
-    #hint-next-stroke-button {
-      background-color: #FFC107;color: #333;display: none;
-    }
-    #hint-next-stroke-button:hover {background-color: #FFB300;}
-    #hint-next-stroke-button:disabled { background-color: #E0E0E0; color: #A0A0A0; cursor: not-allowed; opacity: 0.7; }
+    #quiz-controls {margin-top:0px;height:30px;display:flex;justify-content:center;align-items:center;}
+    #hint-next-stroke-button {background-color:#FFC107;color:#333;display:none;}
+    #hint-next-stroke-button:hover {background-color:#FFB300;}
+    #hint-next-stroke-button:disabled { background-color:#E0E0E0;color:#A0A0A0;cursor:not-allowed;opacity:0.7;}
 
-    #practiced-characters-container{
-      margin-top:20px;padding:15px;width:95%;max-width:600px;background-color:#fdfdfd;border:1px solid #eee;border-radius:8px;box-shadow:0 2px 4px rgba(0,0,0,.05)
+    #practiced-characters-container{margin-top:20px;padding:15px;width:95%;max-width:600px;background-color:#fdfdfd;border:1px solid #eee;border-radius:8px;box-shadow:0 2px 4px rgba(0,0,0,.05)}
+    #practiced-characters-container h2{color:#00695c;font-size:1.3em;margin-top:0;margin-bottom:10px;font-weight:700}
+    #practiced-characters-list{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;font-weight:normal;min-height:2em}
+    .practiced-char-item{background-color:#e0f2f1;color:#00796b;padding:5px 10px;border-radius:4px;font-size:1.1em}
+    
+    #congrats-overlay{
+        position:absolute;top:0;left:0;
+        width:100%;height:100%;
+        display:none; 
+        flex-direction:column;align-items:center;justify-content:center;
+        z-index:10;pointer-events:none;overflow:hidden;
+        background-color: rgba(255, 255, 255, 0.85); 
+        border-radius:8px
     }
-    #practiced-characters-container h2{
-      color:#00695c;font-size:1.3em;margin-top:0;margin-bottom:10px;font-weight:700
-    }
-    #practiced-characters-list{
-      display:flex;flex-wrap:wrap;gap:8px;justify-content:center;font-weight:normal;min-height:2em
-    }
-    .practiced-char-item{
-      background-color:#e0f2f1;color:#00796b;padding:5px 10px;border-radius:4px;font-size:1.1em
-    }
-    #congrats-overlay{position:absolute;top:0;left:0;width:100%;height:100%;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:10;pointer-events:none;overflow:hidden;background-color:rgba(255,255,255,.85);border-radius:8px}
-    #congrats-message{font-size:1.8em;color:#ff6f61;text-shadow:1px 1px 2px rgba(0,0,0,.1);margin-bottom:15px;font-weight:700;font-family:'CoriandrumCustom','芫荽體','DFPYuanMXBold-B5','BLeUUX','Arial Rounded MT Bold','Hiragino Maru Gothic ProN','LiHei Pro','儷黑 Pro','Microsoft JhengHei Rounded','Microsoft YaHei Rounded',"微軟正黑體","微軟雅黑體",sans-serif;animation:message-appear .5s ease-out forwards;display:flex;align-items:center}
-    .thumbs-up-icon svg{width:1em;height:1em;fill:#ff6f61;margin-left:8px}
-    .stars-container{display:flex;gap:8px}
+    
+    .stars-container{display:flex;gap:8px; margin-top: 15px;} 
     .congrats-star svg{width:30px;height:30px}
     .congrats-star{opacity:0;animation:star-sparkle 1.2s ease-out forwards}
     .congrats-star:nth-child(1){animation-delay:0s}
     .congrats-star:nth-child(2){animation-delay:.2s}
     .congrats-star:nth-child(3){animation-delay:.1s}
-    @keyframes message-appear{0%{opacity:0;transform:scale(.7) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+
     @keyframes star-sparkle{0%{opacity:0;transform:scale(.3) rotate(-45deg) translateY(15px)}40%{opacity:1;transform:scale(1.2) rotate(15deg) translateY(-5px)}70%{opacity:.8;transform:scale(1) rotate(0deg) translateY(0)}to{opacity:0;transform:scale(.5) rotate(45deg) translateY(10px)}}
     
-    #music-controls {
-        margin-bottom: 20px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-    #play-pause-music-button {
-        font-size: 14px;
-        padding: 8px 15px;
-        background-color: #76D7C4;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: background-color 0.3s ease, opacity 0.3s ease;
-        font-weight: 600;
-        min-width: 120px; 
-    }
-    #play-pause-music-button:hover {
-        background-color: #65BCAA;
-    }
-    #play-pause-music-button:disabled {
-      background-color: #B0BEC5; 
-      color: #78909C;
-      cursor: not-allowed;
-      opacity: 0.7;
-    }
+    #music-controls {margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+    #play-pause-music-button {font-size:14px;padding:8px 15px;background-color:#76D7C4;color:white;border:none;border-radius:6px;cursor:pointer;transition:background-color .3s ease,opacity .3s ease;font-weight:600;min-width:120px;}
+    #play-pause-music-button:hover {background-color:#65BCAA;}
+    #play-pause-music-button:disabled {background-color:#B0BEC5;color:#78909C;cursor:not-allowed;opacity:0.7;}
 
-    /* Media Query for larger screens */
     @media (min-width: 601px) {
-      .display-area-container {
-        flex-direction: row; 
-        align-items: flex-start; 
-        max-width: 580px; /* Adjusted max-width */
-      }
-      #animation-wrapper {
-        width: auto; 
-        max-width: none; /* Remove max-width from wrapper */
-      }
-      #quiz-area-wrapper {
-        width: auto;
-        max-width: none; /* Remove max-width from wrapper */
-      }
-      #animation-display.hanzi-box {
-         width: 180px; /* Larger screen size */
-         height: 180px;
-      }
-      #quiz-display.hanzi-box {
-         width: 350px; /* Larger screen size */
-         height: 350px;
-      }
+      .display-area-container {flex-direction:row;align-items:flex-start;max-width:580px;}
+      #animation-wrapper {width:auto;max-width:none;}
+      #quiz-area-wrapper {width:auto;max-width:none;}
+      #animation-display.hanzi-box {width:180px;height:180px;}
+      #quiz-display.hanzi-box {width:350px;height:350px;}
     }
   </style>
 </head>
@@ -373,7 +139,6 @@
     <div id="quiz-area-wrapper">
         <div id="quiz-display" class="hanzi-box"> 
             <div id="congrats-overlay"> 
-                <div id="congrats-message">你真棒!<span class="thumbs-up-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"></path></svg></span></div>
                 <div class="stars-container">
                   <span class="congrats-star"><svg viewBox="0 0 26 26"><path d="M12 .5l3.09 6.26L22 7.72l-5.46 5.3L17.91 21.5 12 18.27 6.09 21.5l1.36-7.98L2 7.72l6.91-1.01L12 .5z" fill="#FFD700" stroke="#E7B000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
                   <span class="congrats-star"><svg viewBox="0 0 26 26"><path d="M12 .5l3.09 6.26L22 7.72l-5.46 5.3L17.91 21.5 12 18.27 6.09 21.5l1.36-7.98L2 7.72l6.91-1.01L12 .5z" fill="#FFD700" stroke="#E7B000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
@@ -408,121 +173,160 @@
     let numCorrectStrokesInCurrentQuiz = 0;
     let totalStrokesInCurrentChar = 0;
 
-    const replayButton = document.getElementById('replay-animation-button');
-    const charSelectionContainer = document.getElementById('character-selection-buttons');
-    const textInputArea = document.getElementById('text-input-area');
-    const fileInputArea = document.getElementById('file-input-area');
-    const processDataButton = document.getElementById('process-data-button');
-    const directInputModeBtn = document.getElementById('direct-input-mode-btn');
-    const fileInputModeBtn = document.getElementById('file-input-mode-btn');
-    const fileInput = document.getElementById('file-input');
-    const selectedFileNameDisplay = document.getElementById('selected-file-name');
-    const characterSelectSubtitle = document.getElementById('character-select-subtitle');
-    const practicedCharsListDiv = document.getElementById('practiced-characters-list');
-    const animationWrapper = document.getElementById('animation-wrapper'); 
-    
-    const backgroundAudio = document.getElementById('background-audio');
-    const playPauseMusicButton = document.getElementById('play-pause-music-button');
+    let replayButtonElem, charSelectionContainerElem, textInputElem, fileInputAreaDiv, 
+        processDataButtonElem, directInputModeBtnElem, fileInputModeBtnElem, fileInputElem, 
+        selectedFileNameDisplayElem, characterSelectSubtitleElem, practicedCharsListDivElem, 
+        animationWrapperElem, backgroundAudioElem, playPauseMusicButtonElem;
 
     const musicPlaylist = [
         { name: "Ukulele", path: "audio/happy-whistling-ukulele-115485.mp3" }, 
     ];
     let currentTrackIndex = 0;
-    let isMusicUserInitiated = false; 
+    let isMusicUserInitiated = false; // <<<< ENSURED THIS IS DEFINED GLOBALLY
+
+    function initializeDOMReferences() {
+        replayButtonElem = document.getElementById('replay-animation-button');
+        charSelectionContainerElem = document.getElementById('character-selection-buttons');
+        textInputElem = document.getElementById('text-input'); 
+        fileInputAreaDiv = document.getElementById('file-input-area'); 
+        processDataButtonElem = document.getElementById('process-data-button');
+        directInputModeBtnElem = document.getElementById('direct-input-mode-btn');
+        fileInputModeBtnElem = document.getElementById('file-input-mode-btn');
+        fileInputElem = document.getElementById('file-input');
+        selectedFileNameDisplayElem = document.getElementById('selected-file-name');
+        characterSelectSubtitleElem = document.getElementById('character-select-subtitle');
+        practicedCharsListDivElem = document.getElementById('practiced-characters-list');
+        animationWrapperElem = document.getElementById('animation-wrapper'); 
+        backgroundAudioElem = document.getElementById('background-audio');
+        playPauseMusicButtonElem = document.getElementById('play-pause-music-button');
+        normalModePracticeBtn = document.getElementById('normal-mode-practice-btn');
+        challengeModePracticeBtn = document.getElementById('challenge-mode-practice-btn');
+        hintNextStrokeButton = document.getElementById('hint-next-stroke-button');
+    }
 
     function loadTrack(trackIndex, playWhenLoaded = false) {
-        if (!backgroundAudio || !playPauseMusicButton || trackIndex < 0 || trackIndex >= musicPlaylist.length) {
-            console.error("無法載入音軌: 索引無效、播放器或按鈕未找到。", trackIndex);
-            if (playPauseMusicButton) {
-                playPauseMusicButton.textContent = '開啟背景音樂';
-                playPauseMusicButton.disabled = (musicPlaylist.length === 0);
-            }
+        if (!backgroundAudioElem || !playPauseMusicButtonElem ) { console.error("Audio elements not found for loadTrack"); return; }
+        if (trackIndex < 0 || trackIndex >= musicPlaylist.length) {
+            console.warn("Invalid track index for music.", trackIndex);
+             if (musicPlaylist.length > 0) currentTrackIndex = 0; else return;
+        } else {
+            currentTrackIndex = trackIndex;
+        }
+        if (musicPlaylist.length === 0) {
+            playPauseMusicButtonElem.textContent = '無音樂';
+            playPauseMusicButtonElem.disabled = true;
             return;
         }
-        currentTrackIndex = trackIndex;
         const track = musicPlaylist[currentTrackIndex];
-        backgroundAudio.src = track.path;
-        backgroundAudio.load(); 
-        console.log("已載入音軌:", track.name); 
+        if (!track || !track.path) {
+            console.error("Track data or path is invalid for index: ", currentTrackIndex);
+            playPauseMusicButtonElem.textContent = '音軌錯誤';
+            playPauseMusicButtonElem.disabled = true;
+            return;
+        }
+
+        backgroundAudioElem.src = track.path;
+        console.log("Attempting to load audio track:", track.name, track.path);
+        backgroundAudioElem.load(); 
         
         if (playWhenLoaded) {
             playCurrentTrack();
         } else {
-            playPauseMusicButton.textContent = '開啟背景音樂'; 
-            playPauseMusicButton.disabled = false; 
+            playPauseMusicButtonElem.textContent = '開啟背景音樂'; 
+            playPauseMusicButtonElem.disabled = false; 
         }
     }
 
     function playCurrentTrack() {
-        if (!backgroundAudio || !playPauseMusicButton) return;
-
-        if (!backgroundAudio.src && musicPlaylist.length > 0) {
-            loadTrack(0, true); 
-            return;
+        if (!backgroundAudioElem || !playPauseMusicButtonElem) { console.error("Audio elements not found for playCurrentTrack"); return; }
+        if (musicPlaylist.length === 0) {
+            playPauseMusicButtonElem.textContent = '無音樂'; playPauseMusicButtonElem.disabled = true; return;
         }
-        if (!backgroundAudio.src && musicPlaylist.length === 0) {
-            playPauseMusicButton.textContent = '開啟背景音樂';
-            playPauseMusicButton.disabled = true;
-            return;
+        
+        const expectedSrc = new URL(musicPlaylist[currentTrackIndex].path, window.location.href).href;
+        if (!backgroundAudioElem.src || backgroundAudioElem.src !== expectedSrc) {
+             console.log("Audio src mismatch or not set. Loading track before play:", musicPlaylist[currentTrackIndex].name);
+             loadTrack(currentTrackIndex, true); 
+             return;
         }
-
-        backgroundAudio.play().then(() => {
-            playPauseMusicButton.textContent = '關閉背景音樂';
-            playPauseMusicButton.disabled = false;
-            isMusicUserInitiated = true;
-        }).catch(error => {
-            console.warn("播放失敗:", error);
-            playPauseMusicButton.textContent = '開啟背景音樂';
-            playPauseMusicButton.disabled = (musicPlaylist.length === 0); 
-        });
+        
+        console.log("Attempting to play:", backgroundAudioElem.src);
+        const playPromise = backgroundAudioElem.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                playPauseMusicButtonElem.textContent = '關閉背景音樂';
+                playPauseMusicButtonElem.disabled = false;
+                isMusicUserInitiated = true; 
+                console.log("Music playing:", musicPlaylist[currentTrackIndex].name);
+            }).catch(error => {
+                console.warn("Music play failed:", error);
+                playPauseMusicButtonElem.textContent = '開啟背景音樂';
+                playPauseMusicButtonElem.disabled = musicPlaylist.length === 0;
+            });
+        }
     }
 
-    if (playPauseMusicButton && backgroundAudio) {
-        playPauseMusicButton.onclick = function() {
-            if (backgroundAudio.paused) {
-                playCurrentTrack();
+    function setupMusicControls() {
+        if (playPauseMusicButtonElem && backgroundAudioElem) {
+            playPauseMusicButtonElem.onclick = function() {
+                console.log("Play/Pause button clicked. Audio paused state:", backgroundAudioElem.paused, "User initiated:", isMusicUserInitiated);
+                if (!isMusicUserInitiated || backgroundAudioElem.paused) { 
+                    playCurrentTrack(); 
+                } else {
+                    backgroundAudioElem.pause();
+                    playPauseMusicButtonElem.textContent = '開啟背景音樂';
+                    console.log("Music paused by user.");
+                }
+            };
+            backgroundAudioElem.onended = function() {
+                console.log("Track ended. Loading next.");
+                currentTrackIndex = (currentTrackIndex + 1) % musicPlaylist.length;
+                loadTrack(currentTrackIndex, true); 
+            };
+            backgroundAudioElem.onerror = function(e) {
+                console.error("Audio error occurred:", e, "Src:", backgroundAudioElem.currentSrc);
+                playPauseMusicButtonElem.textContent = '播放錯誤';
+                playPauseMusicButtonElem.disabled = true;
+            };
+
+            if (musicPlaylist.length === 0) {
+                playPauseMusicButtonElem.textContent = '無音樂';
+                playPauseMusicButtonElem.disabled = true;
             } else {
-                backgroundAudio.pause();
-                playPauseMusicButton.textContent = '開啟背景音樂';
+                playPauseMusicButtonElem.textContent = '開啟背景音樂';
+                playPauseMusicButtonElem.disabled = false;
+                loadTrack(0, false); 
             }
-        };
-        backgroundAudio.onended = function() {
-            currentTrackIndex = (currentTrackIndex + 1) % musicPlaylist.length;
-            loadTrack(currentTrackIndex, true); 
-        };
-        if (musicPlaylist.length === 0) {
-            playPauseMusicButton.textContent = '無音樂';
-            playPauseMusicButton.disabled = true;
         } else {
-            playPauseMusicButton.textContent = '開啟背景音樂';
-            playPauseMusicButton.disabled = false;
-            loadTrack(0, false); 
+            console.warn("Music control elements not found during setup.");
         }
     }
 
     function showDirectInputMode() { 
         inputMode = 'text';
-        if(textInputArea) textInputArea.style.display = 'flex';
-        if(fileInputArea) fileInputArea.style.display = 'none';
-        if(processDataButton) processDataButton.textContent = '處理輸入文字';
-        if(directInputModeBtn) directInputModeBtn.classList.add('active');
-        if(fileInputModeBtn) fileInputModeBtn.classList.remove('active');
-        if(selectedFileNameDisplay) selectedFileNameDisplay.textContent = ''; 
-        if(fileInput) fileInput.value = ''; 
+        const textInputAreaDiv = document.getElementById('text-input-area');
+        if(textInputAreaDiv) textInputAreaDiv.style.display = 'flex';
+        if(fileInputAreaDiv) fileInputAreaDiv.style.display = 'none';
+        if(processDataButtonElem) processDataButtonElem.textContent = '處理輸入文字';
+        if(directInputModeBtnElem) directInputModeBtnElem.classList.add('active');
+        if(fileInputModeBtnElem) fileInputModeBtnElem.classList.remove('active');
+        if(selectedFileNameDisplayElem) selectedFileNameDisplayElem.textContent = ''; 
+        if(fileInputElem) fileInputElem.value = ''; 
     }
     function showFileUploadMode() { 
         inputMode = 'file';
-        if(textInputArea) textInputArea.style.display = 'none';
-        if(fileInputArea) fileInputArea.style.display = 'flex';
-        if(processDataButton) processDataButton.textContent = '處理選定檔案';
-        if(directInputModeBtn) directInputModeBtn.classList.remove('active');
-        if(fileInputModeBtn) fileInputModeBtn.classList.add('active');
+        const textInputAreaDiv = document.getElementById('text-input-area');
+        if(textInputAreaDiv) textInputAreaDiv.style.display = 'none';
+        if(fileInputAreaDiv) fileInputAreaDiv.style.display = 'flex';
+        if(processDataButtonElem) processDataButtonElem.textContent = '處理選定檔案';
+        if(directInputModeBtnElem) directInputModeBtnElem.classList.remove('active');
+        if(fileInputModeBtnElem) fileInputModeBtnElem.classList.add('active');
     }
     function updateSelectedFileName() { 
-        if (fileInput && fileInput.files.length > 0) {
-            if(selectedFileNameDisplay) selectedFileNameDisplay.textContent = `已選檔案: ${fileInput.files[0].name}`;
+        if (fileInputElem && fileInputElem.files.length > 0) {
+            if(selectedFileNameDisplayElem) selectedFileNameDisplayElem.textContent = `已選檔案: ${fileInputElem.files[0].name}`;
         } else {
-            if(selectedFileNameDisplay) selectedFileNameDisplay.textContent = '';
+            if(selectedFileNameDisplayElem) selectedFileNameDisplayElem.textContent = '';
         }
     }
     
@@ -534,29 +338,23 @@
         if(quizBox) {
             const congratsElem = quizBox.querySelector('#congrats-overlay');
             quizBox.innerHTML = ''; 
-            if (congratsElem) { 
-                quizBox.appendChild(congratsElem);
-                congratsElem.style.display = 'none'; 
-            }
+            if (congratsElem) { quizBox.appendChild(congratsElem); congratsElem.style.display = 'none'; }
         }
-        if(charSelectionContainer) charSelectionContainer.innerHTML = '';
+        if(charSelectionContainerElem) charSelectionContainerElem.innerHTML = '';
         animationInstance = null; quizInstance = null; currentDisplayChar = null;
         numCorrectStrokesInCurrentQuiz = 0; totalStrokesInCurrentChar = 0; 
-
-        if(replayButton) replayButton.disabled = true;
-        if (animationWrapper) animationWrapper.style.display = 'none'; 
-        if (characterSelectSubtitle) characterSelectSubtitle.style.display = 'none';
+        if(replayButtonElem) replayButtonElem.disabled = true;
+        if (animationWrapperElem) animationWrapperElem.style.display = 'none'; 
+        if (characterSelectSubtitleElem) characterSelectSubtitleElem.style.display = 'none';
         if (hintNextStrokeButton) hintNextStrokeButton.style.display = 'none';
 
         if (inputMode === 'text') {
-            const text = document.getElementById("text-input").value.trim();
-            if (text.length > 0) { generateCharacterButtons(text); } else { alert("請輸入文字！"); }
+            if (!textInputElem) { console.error("processData Error: textInputElem not found!"); alert("錯誤：找不到文字輸入框元件！"); return; }
+            const text = textInputElem.value.trim(); 
+            if (text.length > 0) generateCharacterButtons(text); else alert("請輸入文字！");
         } else if (inputMode === 'file') {
-            const currentFileInput = document.getElementById('file-input'); 
-            if (!currentFileInput || !currentFileInput.files || currentFileInput.files.length === 0) {
-                alert("請選擇一個檔案！"); return;
-            }
-            const file = currentFileInput.files[0];
+            if (!fileInputElem || !fileInputElem.files || fileInputElem.files.length === 0) { alert("請選擇一個檔案！"); return; }
+            const file = fileInputElem.files[0];
             if (file) {
               const reader = new FileReader();
               reader.onload = function(e) { generateCharacterButtons(e.target.result); };
@@ -564,65 +362,48 @@
               reader.readAsText(file, 'UTF-8');
             } else { alert("請選擇一個檔案！"); }
         }
-      } catch (error) { console.error("Error in processData:", error); }
+      } catch (error) { console.error("Error in processData:", error); alert("處理資料時發生錯誤，詳情請見控制台。");}
     }
 
     function generateCharacterButtons(text) { 
       try {
         const uniqueChars = [...new Set(text.replace(/[^\u4e00-\u9fa5]/g, ''))];
-        if(charSelectionContainer) charSelectionContainer.innerHTML = ''; 
+        if(charSelectionContainerElem) charSelectionContainerElem.innerHTML = ''; 
         if (uniqueChars.length > 0) {
-            if (characterSelectSubtitle) characterSelectSubtitle.style.display = 'block'; 
+            if (characterSelectSubtitleElem) characterSelectSubtitleElem.style.display = 'block'; 
             uniqueChars.forEach(char => {
             const button = document.createElement('button');
             button.classList.add('char-select-button');
             button.textContent = char; 
-            button.onclick = function() {
-                try {
-                    document.querySelectorAll('.char-select-button.active').forEach(activeBtn => {
-                        activeBtn.classList.remove('active');});
-                    this.classList.add('active');
-                    displayCharacterInBothModes(char);
-                } catch (e) { console.error("Error in char button onclick:", e); }
+            button.onclick = function() { 
+                document.querySelectorAll('.char-select-button.active').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                displayCharacterInBothModes(char); 
             };
-            if(charSelectionContainer) charSelectionContainer.appendChild(button);
+            if(charSelectionContainerElem) charSelectionContainerElem.appendChild(button);
             });
         } else {
-            if (characterSelectSubtitle) characterSelectSubtitle.style.display = 'none';
+            if (characterSelectSubtitleElem) characterSelectSubtitleElem.style.display = 'none';
             alert("未在輸入中找到有效的中文字元進行練習！");
         }
       } catch (error) { console.error("Error in generateCharacterButtons:", error); }
     }
 
     function setPracticeMode(mode) {
-        console.log("[setPracticeMode] Setting mode to:", mode);
         currentPracticeMode = mode;
-        if (!normalModePracticeBtn || !challengeModePracticeBtn || !hintNextStrokeButton) {
-            console.error("[setPracticeMode] Mode control buttons not found!");
-            return;
-        }
-
-        if (mode === 'normal') {
-            normalModePracticeBtn.classList.add('active');
-            challengeModePracticeBtn.classList.remove('active');
-            hintNextStrokeButton.style.display = 'none';
-        } else { 
-            normalModePracticeBtn.classList.remove('active');
-            challengeModePracticeBtn.classList.add('active');
-            hintNextStrokeButton.style.display = (quizInstance && currentDisplayChar) ? 'inline-block' : 'none';
-        }
+        if (!normalModePracticeBtn || !challengeModePracticeBtn || !hintNextStrokeButton) return;
+        normalModePracticeBtn.classList.toggle('active', mode === 'normal');
+        challengeModePracticeBtn.classList.toggle('active', mode === 'challenge');
+        hintNextStrokeButton.style.display = (mode === 'challenge' && quizInstance && currentDisplayChar) ? 'inline-block' : 'none';
 
         if (currentDisplayChar) {
-            console.log("[setPracticeMode] currentDisplayChar exists:", currentDisplayChar, ". Re-creating quiz instance.");
             const quizBox = document.getElementById('quiz-display');
             if (quizBox) {
                 const hanziWriterSVG = quizBox.querySelector('svg:not(#congrats-overlay svg)');
                 if (hanziWriterSVG) hanziWriterSVG.remove();
-                quizBox.querySelectorAll('div:not(#congrats-overlay)').forEach(el => {
-                    if(el.id !== 'congrats-message' && !el.classList.contains('stars-container') && !el.classList.contains('thumbs-up-icon') && el.parentNode === quizBox) {
-                        quizBox.removeChild(el);
-                    }
-                });
+                const congratsOverlay = quizBox.querySelector('#congrats-overlay');
+                quizBox.innerHTML = ''; 
+                if (congratsOverlay) { quizBox.appendChild(congratsOverlay); congratsOverlay.style.display = 'none'; }
             }
             quizInstance = null; 
             numCorrectStrokesInCurrentQuiz = 0; totalStrokesInCurrentChar = 0; 
@@ -632,306 +413,181 @@
     
     function createQuizInstance(char) {
         try {
-            console.log("--- [DEBUG POINT createQuizInstance START] ---");
-            console.log("  Char:", char, "Mode:", currentPracticeMode);
             const quizBox = document.getElementById('quiz-display');
-            if (!quizBox) { console.error("  Quiz box not found!"); return; }
-
-            // Dynamic sizing for quizBox
-            let quizBoxContainerWidth = quizBox.parentElement.offsetWidth; // Get width of quiz-area-wrapper
-            let targetQuizBoxSize = Math.min(quizBoxContainerWidth * 0.95, 350); // 95% of wrapper, max 350px
-            targetQuizBoxSize = Math.max(targetQuizBoxSize, 200); // Min 200px
-            
-            // Set CSS for quizBox itself for visual consistency if HanziWriter doesn't fill it.
-            quizBox.style.width = targetQuizBoxSize + 'px';
-            quizBox.style.height = targetQuizBoxSize + 'px';
-
-
-            const oldHanziWriterSvg = quizBox.querySelector('svg'); // Clear any old SVG
-            if (oldHanziWriterSvg && oldHanziWriterSvg.parentElement === quizBox) {
-                 oldHanziWriterSvg.remove();
-            }
-             quizBox.querySelectorAll('div:not(#congrats-overlay)').forEach(el => {
-                if(el.id !== 'congrats-message' && !el.classList.contains('stars-container') && !el.classList.contains('thumbs-up-icon') && el.parentNode === quizBox) {
-                   quizBox.removeChild(el);
-                }
-            });
-
-
+            if (!quizBox) { return; }
+            let quizBoxContainerWidth = quizBox.parentElement.offsetWidth; 
+            let targetQuizBoxSize = quizBoxContainerWidth > 0 ? quizBoxContainerWidth * 0.95 : 280;
+            targetQuizBoxSize = Math.min(targetQuizBoxSize, 350); 
+            targetQuizBoxSize = Math.max(targetQuizBoxSize, 200); 
+            quizBox.style.width = targetQuizBoxSize + 'px'; quizBox.style.height = targetQuizBoxSize + 'px';
+            const oldHanziWriterSvg = quizBox.querySelector('svg:not(#congrats-overlay svg)');
+            if (oldHanziWriterSvg) oldHanziWriterSvg.remove();
+            const otherDivs = Array.from(quizBox.childNodes).filter(node => node.nodeName === 'DIV' && node.id !== 'congrats-overlay');
+            otherDivs.forEach(d => d.remove());
             const dynamicPadding = Math.floor(targetQuizBoxSize / 15);
-            
             let hanziWriterCreateOptions = {
-                width: targetQuizBoxSize, 
-                height: targetQuizBoxSize, 
-                padding: dynamicPadding,
-                strokeColor: '#000000', 
-                drawingColor: '#333333',
-                drawingWidth: Math.max(8, Math.floor(targetQuizBoxSize / 38)), // Adjusted drawingWidth
+                width: targetQuizBoxSize, height: targetQuizBoxSize, padding: dynamicPadding,
+                strokeColor: '#000000', drawingColor: '#333333',
+                drawingWidth: Math.max(8, Math.floor(targetQuizBoxSize / 38)),
                 highlightOnComplete: true,
-
-                onLoadCharDataError: function(err) {
-                    console.error("  [DEBUG POINT onLoadCharDataError] Char:", char, err);
-                    const errorMsgDiv = document.createElement('div');
-                    errorMsgDiv.textContent = '字元載入失敗';
-                    const existingSvg = quizBox.querySelector('svg:not(#congrats-overlay svg)');
-                    if (existingSvg) existingSvg.remove();
-                    const existingErrorDivs = quizBox.querySelectorAll('div:not(#congrats-overlay)');
-                    existingErrorDivs.forEach(d => {
-                        if(d.id !== 'congrats-message' && !d.classList.contains('stars-container') && !d.classList.contains('thumbs-up-icon')) {
-                           d.remove();
-                        }
-                    });
+                onLoadCharDataError: function(err) { 
+                    quizBox.innerHTML = ''; 
+                    const congratsOverlay = document.getElementById('congrats-overlay'); 
+                    if (congratsOverlay && !congratsOverlay.parentElement) quizBox.appendChild(congratsOverlay);
+                    const errorMsgDiv = document.createElement('div'); errorMsgDiv.textContent = '字元載入失敗';
                     quizBox.appendChild(errorMsgDiv);
-                    if (hintNextStrokeButton) hintNextStrokeButton.disabled = true;
+                    if(hintNextStrokeButton) hintNextStrokeButton.disabled = true;
                 },
                 onLoadCharDataSuccess: function(charDataObj) { 
-                    console.log("  [DEBUG POINT onLoadCharDataSuccess START] Char:", char);
-                    console.log("    DEBUG POINT C: typeof quizInstance.highlightStroke:", quizInstance ? typeof quizInstance.highlightStroke : "quizInstance is null/undefined");
-                    console.log("    DEBUG POINT D: quizInstance._character (before quiz()):", quizInstance ? quizInstance._character : "quizInstance is null/undefined");
-                    console.log("    DEBUG POINT E: charDataObj from callback:", charDataObj);
-
                     if (charDataObj && charDataObj.strokes && Array.isArray(charDataObj.strokes)) {
                         totalStrokesInCurrentChar = charDataObj.strokes.length;
-                        console.log("    DEBUG POINT H: Stored totalStrokesInCurrentChar from charDataObj:", totalStrokesInCurrentChar);
-                    } else if (quizInstance && quizInstance._character && quizInstance._character.strokes && Array.isArray(quizInstance._character.strokes)) {
-                        totalStrokesInCurrentChar = quizInstance._character.strokes.length; 
-                        console.log("    DEBUG POINT F: Stored totalStrokesInCurrentChar from quizInstance._character.strokes:", totalStrokesInCurrentChar);
-                    } else {
-                        totalStrokesInCurrentChar = 0; 
-                        console.error("    DEBUG POINT I: Character data or strokes array is missing or invalid.");
-                    }
-                     
-                    if (quizInstance && quizInstance._character && quizInstance._character.strokes && totalStrokesInCurrentChar === 0) {
-                         totalStrokesInCurrentChar = quizInstance._character.strokes.length;
-                         console.log("    DEBUG POINT F (Fallback): Stored totalStrokesInCurrentChar from quizInstance._character.strokes:", totalStrokesInCurrentChar);
-                    }
-
-
-                    console.log("    DEBUG POINT J (before quiz() & immediate test): typeof quizInstance.highlightStroke:", quizInstance ? typeof quizInstance.highlightStroke : "quizInstance is null/undefined");
-                    if (quizInstance && typeof quizInstance.highlightStroke === 'function' && totalStrokesInCurrentChar > 0) {
-                        console.log("    Attempting an IMMEDIATE TEST of highlightStroke(0)");
-                        try {
-                            quizInstance.highlightStroke(0, { duration: 100, color: '#00FF00' }); 
-                            console.log("    IMMEDIATE TEST of highlightStroke(0) called successfully.");
-                        } catch (e) {
-                            console.error("    IMMEDIATE TEST of highlightStroke(0) FAILED:", e);
-                        }
-                    } else {
-                        console.warn("    Skipping IMMEDIATE TEST of highlightStroke: method not found or no strokes.");
-                    }
-
-
+                    } else { totalStrokesInCurrentChar = 0; }
                     if (quizInstance && typeof quizInstance.quiz === 'function') {
                         numCorrectStrokesInCurrentQuiz = 0; 
-
-                        let quizInteractionOptions = {
-                            onMistake: function(strokeData) {
-                                console.log(`  Quiz Mistake: Stk ${strokeData.strokeNum}, Total ${strokeData.totalMistakes}, MistakesOnStroke: ${strokeData.mistakesOnStroke}`);
-                            },
-                            onCorrectStroke: function(strokeData) {
-                                numCorrectStrokesInCurrentQuiz++;
-                                console.log(`  Quiz Correct: Stk ${strokeData.strokeNum}, CorrectSoFar: ${numCorrectStrokesInCurrentQuiz}, MOnS ${strokeData.mistakesOnStroke}`);
-                                console.log("      DEBUG onCorrectStroke: typeof quizInstance.highlightStroke:", quizInstance ? typeof quizInstance.highlightStroke : "quizInstance is null/undefined");
-                                console.log("      DEBUG onCorrectStroke: quizInstance._character:", quizInstance ? quizInstance._character : "quizInstance is null/undefined");
-                            },
+                        quizInstance.quiz({
+                            onCorrectStroke: function(strokeData) { numCorrectStrokesInCurrentQuiz++; },
                             onComplete: function(summaryData){
-                                console.log("  Quiz completed for", char, summaryData);
-                                if (!practicedCharSet.has(char)) {
-                                    practicedCharSet.add(char);
-                                    updatePracticedCharactersDisplay();
-                                }
+                                if (!practicedCharSet.has(char)) { practicedCharSet.add(char); updatePracticedCharactersDisplay(); }
                                 showCongratulationAnimation();
                             },
                             leniency: 1.3,
                             showHintAfterMisses: (currentPracticeMode === 'challenge') ? 100000 : 2
-                        };
-                        quizInstance.quiz(quizInteractionOptions);
-                        console.log("    DEBUG POINT K (after quiz()): typeof quizInstance.highlightStroke:", quizInstance ? typeof quizInstance.highlightStroke : "quizInstance is null/undefined");
-
-
-                        if (currentPracticeMode === 'challenge' && hintNextStrokeButton) {
-                            hintNextStrokeButton.disabled = false; 
-                        } else if (hintNextStrokeButton) {
-                            hintNextStrokeButton.disabled = true; 
-                        }
-                    } else {
-                        console.error("  quizInstance.quiz method not available or quizInstance is null.");
-                        if (hintNextStrokeButton) hintNextStrokeButton.disabled = true;
-                    }
-                    console.log("  [DEBUG POINT onLoadCharDataSuccess END]");
+                        });
+                        if (currentPracticeMode === 'challenge' && hintNextStrokeButton) hintNextStrokeButton.disabled = false; 
+                        else if (hintNextStrokeButton) hintNextStrokeButton.disabled = true; 
+                    } else { if (hintNextStrokeButton) hintNextStrokeButton.disabled = true; }
                 }
             };
-
             if (currentPracticeMode === 'challenge') {
-                hanziWriterCreateOptions.showOutline = false;
-                hanziWriterCreateOptions.showCharacter = false;
-                if (hintNextStrokeButton) {
-                    hintNextStrokeButton.style.display = 'inline-block';
-                    hintNextStrokeButton.disabled = true; 
-                }
+                hanziWriterCreateOptions.showOutline = false; hanziWriterCreateOptions.showCharacter = false;
+                if (hintNextStrokeButton) { hintNextStrokeButton.style.display = 'inline-block'; hintNextStrokeButton.disabled = true; }
             } else { 
-                hanziWriterCreateOptions.showOutline = true;
-                hanziWriterCreateOptions.outlineColor = '#DDDDDD';
-                hanziWriterCreateOptions.showCharacter = false;
-                if (hintNextStrokeButton) {
-                    hintNextStrokeButton.style.display = 'none';
-                }
+                hanziWriterCreateOptions.showOutline = true; hanziWriterCreateOptions.outlineColor = '#DDDDDD'; hanziWriterCreateOptions.showCharacter = false;
+                if (hintNextStrokeButton) { hintNextStrokeButton.style.display = 'none';}
             }
-            console.log("  [DEBUG POINT createQuizInstance] About to call HanziWriter.create()");
             quizInstance = HanziWriter.create(quizBox, char, hanziWriterCreateOptions);
-            console.log("  [DEBUG POINT createQuizInstance] Immediately after HanziWriter.create call.");
-            console.log("    DEBUG POINT A: typeof quizInstance.highlightStroke:", quizInstance ? typeof quizInstance.highlightStroke : "quizInstance is null/undefined");
-            console.log("    DEBUG POINT B: quizInstance._character:", quizInstance ? quizInstance._character : "quizInstance is null/undefined"); 
-
-            if (!quizInstance) { console.error("  Failed to create quizInstance for char:", char); }
-            else { console.log("  Quiz instance initially created object for char:", char); }
-            console.log("--- [DEBUG POINT createQuizInstance END] ---");
-        } catch(error) { console.error("Error in createQuizInstance:", error); }
+        } catch(error) { console.error("Error in createQuizInstance for " + char + ":", error); }
     }
 
     function displayCharacterInBothModes(char) {
       try {
         currentDisplayChar = char; 
         const animBoxElement = document.getElementById('animation-display');
-        
-        if (animationWrapper) animationWrapper.style.display = 'flex'; 
+        if (animationWrapperElem) animationWrapperElem.style.display = 'flex'; 
         if(animBoxElement) animBoxElement.innerHTML = '';
-
         const quizBoxElement = document.getElementById('quiz-display');
         if(quizBoxElement){
             const hanziWriterSVG = quizBoxElement.querySelector('svg:not(#congrats-overlay svg)');
             if (hanziWriterSVG) hanziWriterSVG.remove();
-            quizBoxElement.querySelectorAll('div:not(#congrats-overlay)').forEach(el => {
-                if(el.id !== 'congrats-message' && !el.classList.contains('stars-container') && !el.classList.contains('thumbs-up-icon') && el.parentNode === quizBoxElement) {
-                    quizBoxElement.removeChild(el);
+            const congratsOverlay = quizBoxElement.querySelector('#congrats-overlay');
+            Array.from(quizBoxElement.childNodes).forEach(node => {
+                if (node.id !== 'congrats-overlay' && node.nodeName !== 'SCRIPT' && node.nodeName !== 'STYLE') { 
+                    quizBoxElement.removeChild(node);
                 }
             });
-            const congratsElem = quizBoxElement.querySelector('#congrats-overlay');
-            if(congratsElem) congratsElem.style.display = 'none'; 
+            if (congratsOverlay && !congratsOverlay.parentElement) { 
+                 quizBoxElement.appendChild(congratsOverlay);
+            }
+            if(congratsOverlay) congratsOverlay.style.display = 'none'; 
         }
-
-        animationInstance = null; 
-        quizInstance = null; 
+        animationInstance = null; quizInstance = null; 
         numCorrectStrokesInCurrentQuiz = 0; totalStrokesInCurrentChar = 0;
-
-        if(replayButton) replayButton.disabled = true;
-        if (hintNextStrokeButton) { 
-            hintNextStrokeButton.style.display = 'none';
-            hintNextStrokeButton.disabled = true;
-        }
+        if(replayButtonElem) replayButtonElem.disabled = true;
+        if (hintNextStrokeButton) { hintNextStrokeButton.style.display = 'none'; hintNextStrokeButton.disabled = true; }
         
-        // Dynamic sizing for animation box
         if (animBoxElement) {
             let animBoxContainerWidth = animBoxElement.parentElement.offsetWidth;
-            let targetAnimBoxSize = Math.min(animBoxContainerWidth * 0.95, 180); // 95% of wrapper, max 180
-            targetAnimBoxSize = Math.max(targetAnimBoxSize, 100); // Min 100
-
-            animBoxElement.style.width = targetAnimBoxSize + 'px';
-            animBoxElement.style.height = targetAnimBoxSize + 'px';
+            let targetAnimBoxSize = animBoxContainerWidth > 0 ? animBoxContainerWidth * 0.95 : 150;
+            targetAnimBoxSize = Math.min(targetAnimBoxSize, 180); 
+            targetAnimBoxSize = Math.max(targetAnimBoxSize, 100); 
+            animBoxElement.style.width = targetAnimBoxSize + 'px'; animBoxElement.style.height = targetAnimBoxSize + 'px';
             const animPadding = Math.floor(targetAnimBoxSize / 12);
-
-            animationInstance = HanziWriter.create(animBoxElement, char, {
+            animationInstance = HanziWriter.create(animBoxElement, char, { 
                 width: targetAnimBoxSize, height: targetAnimBoxSize, padding: animPadding,
                 strokeColor: '#000000', showCharacter: true, showOutline: false,
                 strokeAnimationSpeed: 0.6, delayBetweenStrokes: 80, autoAnimate: false,
-                onLoadCharDataError: function(err) {
-                    if(animBoxElement) animBoxElement.innerHTML = '字元載入失敗'; 
-                    if(replayButton) replayButton.disabled = true;},
-                onLoadCharDataSuccess: function() {
-                    if (animationInstance) { animationInstance.animateCharacter(); 
-                        if(replayButton) replayButton.disabled = false;}},
-                onComplete: function() { console.log("Animation complete for char:", char); }});
-            if (!animationInstance && replayButton) { replayButton.disabled = true; }
+                onLoadCharDataError: function(err) { if(animBoxElement) animBoxElement.innerHTML = '字元載入失敗'; if(replayButtonElem) replayButtonElem.disabled = true;},
+                onLoadCharDataSuccess: function() { if (animationInstance) { animationInstance.animateCharacter(); if(replayButtonElem) replayButtonElem.disabled = false;}},
+                onComplete: function() { /* ... */ }});
+            if (!animationInstance && replayButtonElem) { replayButtonElem.disabled = true; }
         }
-        
         createQuizInstance(char);
-
-      } catch (error) { console.error("Error in displayCharacterInBothModes:", error); }
+      } catch (error) { console.error("Error in displayCharacterInBothModes for " + char + ":", error); }
     }
 
     function replayAnimation() { 
       if (animationInstance && currentDisplayChar) { animationInstance.animateCharacter();}}
     
     function updatePracticedCharactersDisplay() { 
-        if (!practicedCharsListDiv) return;
-        practicedCharsListDiv.innerHTML = ''; 
-        if (practicedCharSet.size === 0) {
-            practicedCharsListDiv.textContent = '尚未練習任何字元。'; return;}
+        if (!practicedCharsListDivElem) return;
+        practicedCharsListDivElem.innerHTML = ''; 
+        if (practicedCharSet.size === 0) { practicedCharsListDivElem.textContent = '尚未練習任何字元。'; return;}
         const charsArray = Array.from(practicedCharSet); 
         charsArray.forEach(practicedChar => {
             const charSpan = document.createElement('span');
             charSpan.classList.add('practiced-char-item');
             charSpan.textContent = practicedChar;
-            practicedCharsListDiv.appendChild(charSpan);});}
+            practicedCharsListDivElem.appendChild(charSpan);});}
 
     function showCongratulationAnimation() {
       try {
         const quizDisplayBox = document.getElementById('quiz-display'); 
-        if (!quizDisplayBox) return;
+        if (!quizDisplayBox) { console.error("Congratulation: quizDisplayBox not found"); return; }
         const congratsInQuizBox = quizDisplayBox.querySelector('#congrats-overlay');
-        if (!congratsInQuizBox) return;
+        if (!congratsInQuizBox) { console.error("Congratulation: congratsInQuizBox not found"); return; }
+        
         congratsInQuizBox.style.display = 'flex';
-        const stars = congratsInQuizBox.querySelectorAll('.congrats-star');
-        stars.forEach(star => { star.style.animation = 'none'; star.offsetHeight; star.style.animation = ''; });
-        const messageElement = congratsInQuizBox.querySelector('#congrats-message');
-        if (messageElement) { messageElement.style.animation = 'none'; messageElement.offsetHeight; messageElement.style.animation = '';}
-        setTimeout(() => { congratsInQuizBox.style.display = 'none';}, 2800); 
-      } catch (error) { console.error("Error in showCongratulationAnimation:", error);}}
+        
+        const stars = congratsInQuizBox.querySelectorAll('.congrats-star'); // Using original star logic
+        stars.forEach(star => { 
+            star.style.animation = 'none'; 
+            star.offsetHeight; 
+            star.style.animation = ''; 
+        });
+        
+        setTimeout(() => { 
+          if (congratsInQuizBox) congratsInQuizBox.style.display = 'none';
+        }, 2800); 
+      } catch (error) { console.error("Error in showCongratulationAnimation:", error); }
+    }
     
     window.onload = function() { 
         console.log("window.onload executed.");
+        initializeDOMReferences();
         try {
-            normalModePracticeBtn = document.getElementById('normal-mode-practice-btn');
-            challengeModePracticeBtn = document.getElementById('challenge-mode-practice-btn');
-            hintNextStrokeButton = document.getElementById('hint-next-stroke-button');
-
             if (normalModePracticeBtn) normalModePracticeBtn.onclick = () => setPracticeMode('normal');
             if (challengeModePracticeBtn) challengeModePracticeBtn.onclick = () => setPracticeMode('challenge');
-            
+            if (processDataButtonElem) processDataButtonElem.onclick = processData;
+            if (directInputModeBtnElem) directInputModeBtnElem.onclick = showDirectInputMode;
+            if (fileInputModeBtnElem) fileInputModeBtnElem.onclick = showFileUploadMode;
+            if (fileInputElem) fileInputElem.onchange = updateSelectedFileName;
+            if (replayButtonElem) replayButtonElem.onclick = replayAnimation;
+
             if (hintNextStrokeButton) {
                 hintNextStrokeButton.onclick = function() {
-                    console.log("--- [Hint Button Clicked START] ---");
-                    console.log("  HintClick: Current quizInstance (raw object):", quizInstance);
-                    console.log("  HintClick: numCorrectStrokesInCurrentQuiz:", numCorrectStrokesInCurrentQuiz);
-                    console.log("  HintClick: totalStrokesInCurrentChar:", totalStrokesInCurrentChar);
-                    console.log("  HintClick: typeof quizInstance.highlightStroke:", quizInstance ? typeof quizInstance.highlightStroke : 'quizInstance is null');
-                    console.log("  HintClick: quizInstance._character:", quizInstance ? quizInstance._character : 'quizInstance is null');
-
-
                     if (quizInstance && currentPracticeMode === 'challenge') {
                         if (typeof quizInstance.highlightStroke === 'function' && totalStrokesInCurrentChar > 0) {
-
                             const nextStrokeToHint = numCorrectStrokesInCurrentQuiz;
-
                             if (nextStrokeToHint < totalStrokesInCurrentChar) {
-                                console.log(`  HintClick: Highlighting stroke number ${nextStrokeToHint} (0-indexed). Total strokes: ${totalStrokesInCurrentChar}.`);
-                                quizInstance.highlightStroke(nextStrokeToHint, {
-                                    duration: 1200,
-                                    color: '#FFD700' 
-                                });
+                                quizInstance.highlightStroke(nextStrokeToHint, { duration: 1200, color: '#FFD700' });
                             } else {
                                 alert("太棒了，所有筆劃均已正確完成！");
-                                console.log("  HintClick: All strokes completed.");
                             }
                         } else {
-                            console.error("  HintClick: 提示功能錯誤：quizInstance 缺少 highlightStroke 方法或總筆劃數未正確獲取。");
-                            console.log("    HintClick Debug Detail - typeof quizInstance.highlightStroke:", quizInstance ? typeof quizInstance.highlightStroke : "quizInstance is null");
-                            console.log("    HintClick Debug Detail - totalStrokesInCurrentChar:", totalStrokesInCurrentChar);
-                            console.log("    HintClick Debug Detail - quizInstance._character (internal):", quizInstance ? quizInstance._character : "quizInstance is null");
-                             if (quizInstance && quizInstance._character && quizInstance._character.strokes) { 
-                                console.log("    HintClick Debug Detail - quizInstance._character.strokes.length (internal):", quizInstance._character.strokes.length);
-                            }
-                            alert("無法提供提示功能 (錯誤代碼: E-H03)。請檢查控制台以獲取詳細偵錯資訊。");
+                            alert("無法提供提示功能 (錯誤代碼: E-H04)。請確認 HanziWriter 版本或初始化是否正確。");
+                             console.error("HintClick Error: highlightStroke is " + 
+                                          (quizInstance ? typeof quizInstance.highlightStroke : "quizInstance is null") + 
+                                          ", or totalStrokes is " + totalStrokesInCurrentChar);
                         }
                     } else if (currentPracticeMode !== 'challenge') {
                         alert("提示功能僅在「挑戰模式」中可用。");
                     } else { 
                         alert("請先選擇一個字元開始練習，才能使用提示功能。");
                     }
-                    console.log("--- [Hint Button Clicked END] ---");
                 };
             }
             
+            setupMusicControls();
             showDirectInputMode(); 
             updatePracticedCharactersDisplay(); 
             setPracticeMode('normal'); 
@@ -940,20 +596,9 @@
             if (quizBox) {
                 const initialCongratsOverlay = quizBox.querySelector('#congrats-overlay');
                 if(initialCongratsOverlay) initialCongratsOverlay.style.display = 'none';}
-            if(animationWrapper) { animationWrapper.style.display = 'none'; } 
+            if(animationWrapperElem) { animationWrapperElem.style.display = 'none'; } 
             else { console.warn("animationWrapper element not found on window.onload");}
             
-            if (playPauseMusicButton) {
-                if (musicPlaylist.length === 0) {
-                    playPauseMusicButton.textContent = '無音樂';
-                    playPauseMusicButton.disabled = true;
-                } else {
-                    playPauseMusicButton.textContent = '開啟背景音樂';
-                    playPauseMusicButton.disabled = false;
-                    loadTrack(0, false); 
-                }
-            }
-
         } catch (error) { console.error("Error in window.onload:", error);}};
     console.log("Script block parsing ended.");
   </script>
